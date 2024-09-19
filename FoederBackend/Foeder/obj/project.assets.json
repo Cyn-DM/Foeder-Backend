@@ -428,23 +428,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Cynthia\\.nuget\\packages\\": {},
+    "C:\\Users\\cynth\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Fontys repos\\Foeder\\FoederBackend\\Foeder\\Foeder.csproj",
+      "projectUniqueName": "C:\\Users\\cynth\\Documents\\Fontys repos\\Foeder\\FoederBackend\\Foeder\\Foeder.csproj",
       "projectName": "Foeder",
-      "projectPath": "C:\\Fontys repos\\Foeder\\FoederBackend\\Foeder\\Foeder.csproj",
-      "packagesPath": "C:\\Users\\Cynthia\\.nuget\\packages\\",
-      "outputPath": "C:\\Fontys repos\\Foeder\\FoederBackend\\Foeder\\obj\\",
+      "projectPath": "C:\\Users\\cynth\\Documents\\Fontys repos\\Foeder\\FoederBackend\\Foeder\\Foeder.csproj",
+      "packagesPath": "C:\\Users\\cynth\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\cynth\\Documents\\Fontys repos\\Foeder\\FoederBackend\\Foeder\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Cynthia\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\cynth\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -501,7 +501,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

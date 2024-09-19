@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Foeder")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+724689bcecc22c498697518b7e6cd808a43bc4ae")]
 [assembly: System.Reflection.AssemblyProductAttribute("Foeder")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Foeder")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
