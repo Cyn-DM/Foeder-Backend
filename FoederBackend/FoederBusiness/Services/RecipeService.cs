@@ -1,12 +1,9 @@
-﻿using Foeder.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿namespace FoederBusiness;
 
-namespace Foeder.Controllers;
-
-[ApiController]
-[Route("api/[controller]")]
-public class RecipeController : ControllerBase
+public class RecipeService
 {
+    public RecipeService(){}
+
     private List<Recipe> _recipes = new List<Recipe>()
     {
         new Recipe()
@@ -142,10 +139,4 @@ public class RecipeController : ControllerBase
             }
         }
     };
-
-    [HttpGet]
-    public ActionResult<List<Recipe>> GetRecipes()
-    {
-        return _recipes;
-    }
 }
