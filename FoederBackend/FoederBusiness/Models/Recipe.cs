@@ -1,4 +1,4 @@
-﻿namespace FoederAPI.Models;
+﻿namespace FoederBusiness.Models;
 
 public class Recipe
 {

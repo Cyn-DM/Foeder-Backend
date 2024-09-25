@@ -88,6 +88,16 @@
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
         ]
+      },
+      "FoederBusiness/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/FoederBusiness.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/FoederBusiness.dll": {}
+        }
       }
     }
   },
@@ -420,31 +430,37 @@
         "swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512",
         "swashbuckle.aspnetcore.swaggerui.nuspec"
       ]
+    },
+    "FoederBusiness/1.0.0": {
+      "type": "project",
+      "path": "../FoederBusiness/FoederBusiness.csproj",
+      "msbuildProject": "../FoederBusiness/FoederBusiness.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "FoederBusiness >= 1.0.0",
       "Swashbuckle.AspNetCore >= 6.4.0"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\cynth\\.nuget\\packages\\": {},
+    "C:\\Users\\Cynthia\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\cynth\\Documents\\Fontys repos\\Foeder\\FoederBackend\\FoederAPI\\FoederAPI.csproj",
+      "projectUniqueName": "C:\\Fontys repos\\Foeder\\FoederBackend\\FoederAPI\\FoederAPI.csproj",
       "projectName": "FoederAPI",
-      "projectPath": "C:\\Users\\cynth\\Documents\\Fontys repos\\Foeder\\FoederBackend\\FoederAPI\\FoederAPI.csproj",
-      "packagesPath": "C:\\Users\\cynth\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\cynth\\Documents\\Fontys repos\\Foeder\\FoederBackend\\FoederAPI\\obj\\",
+      "projectPath": "C:\\Fontys repos\\Foeder\\FoederBackend\\FoederAPI\\FoederAPI.csproj",
+      "packagesPath": "C:\\Users\\Cynthia\\.nuget\\packages\\",
+      "outputPath": "C:\\Fontys repos\\Foeder\\FoederBackend\\FoederAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\cynth\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Cynthia\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -459,7 +475,11 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Fontys repos\\Foeder\\FoederBackend\\FoederBusiness\\FoederBusiness.csproj": {
+              "projectPath": "C:\\Fontys repos\\Foeder\\FoederBackend\\FoederBusiness\\FoederBusiness.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -501,7 +521,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

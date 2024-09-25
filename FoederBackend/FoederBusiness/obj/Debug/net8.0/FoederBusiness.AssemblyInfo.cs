@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FoederBusiness")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8b2dee4a926b92382ba5e98ea0455da0efabcbcc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+df16f600a1752d76bb6416f9c799ab0da8b34be6")]
 [assembly: System.Reflection.AssemblyProductAttribute("FoederBusiness")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FoederBusiness")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

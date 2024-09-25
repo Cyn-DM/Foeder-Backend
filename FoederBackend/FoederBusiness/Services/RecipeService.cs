@@ -1,6 +1,9 @@
-﻿namespace FoederBusiness;
+﻿using FoederBusiness.Interfaces;
+using FoederBusiness.Models;
 
-public class RecipeService
+namespace FoederBusiness;
+
+public class RecipeService : IRecipeService
 {
     public RecipeService(){}
 
@@ -139,4 +142,9 @@ public class RecipeService
             }
         }
     };
+
+    public List<Recipe> GetRecipes()
+    {
+        return _recipes;
+    }
 }
