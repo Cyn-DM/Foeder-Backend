@@ -2,8 +2,7 @@
 
 public class Recipe
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
+
     public Guid Id { get; set; }
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
@@ -16,7 +15,7 @@ public class Recipe
 
 public class Ingredient
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Amount { get; set; } = string.Empty;
     

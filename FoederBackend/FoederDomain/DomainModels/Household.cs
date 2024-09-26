@@ -1,9 +1,9 @@
-﻿namespace FoederDomain.DomainModels;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FoederDomain.DomainModels;
 
 public class Household
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
     [Key]
     public Guid Id { get; set; }
     [Required, MinLength(1), MaxLength(50)]

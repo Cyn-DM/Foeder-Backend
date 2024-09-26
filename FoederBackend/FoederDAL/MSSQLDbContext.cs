@@ -3,13 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-
-namespace FoederDAL
-{
-    public class MssqlDbContext : DbContext
-    {
-
 using FoederDomain.DomainModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 namespace FoederDAL
 {
     public class MssqlDbContext(IConfiguration config) : DbContext
+    {
         public DbSet<Household> Households { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
@@ -25,7 +19,8 @@ namespace FoederDAL
         {
             optionsBuilder.UseSqlServer(config["DbConnectionString"]);
         }
->>>>>>> Stashed changes
->>>>>>> Stashed changes
+
+
     }
+
 }

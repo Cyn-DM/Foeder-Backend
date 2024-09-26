@@ -1,4 +1,4 @@
-﻿using FoederDomain.DomainModels;
+﻿using FoederBusiness.Dtos;
 
 namespace FoederBusiness.Interfaces;
 
