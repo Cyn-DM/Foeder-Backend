@@ -92,11 +92,24 @@
       "FoederBusiness/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "FoederDomain": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/FoederBusiness.dll": {}
         },
         "runtime": {
           "bin/placeholder/FoederBusiness.dll": {}
+        }
+      },
+      "FoederDomain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/FoederDomain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/FoederDomain.dll": {}
         }
       }
     }
@@ -435,6 +448,11 @@
       "type": "project",
       "path": "../FoederBusiness/FoederBusiness.csproj",
       "msbuildProject": "../FoederBusiness/FoederBusiness.csproj"
+    },
+    "FoederDomain/1.0.0": {
+      "type": "project",
+      "path": "../FoederDomain/FoederDomain.csproj",
+      "msbuildProject": "../FoederDomain/FoederDomain.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -444,23 +462,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Cynthia\\.nuget\\packages\\": {},
+    "C:\\Users\\cynth\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Fontys repos\\Foeder\\FoederBackend\\FoederAPI\\FoederAPI.csproj",
+      "projectUniqueName": "C:\\Users\\cynth\\Documents\\Fontys repos\\Foeder\\FoederBackend\\FoederAPI\\FoederAPI.csproj",
       "projectName": "FoederAPI",
-      "projectPath": "C:\\Fontys repos\\Foeder\\FoederBackend\\FoederAPI\\FoederAPI.csproj",
-      "packagesPath": "C:\\Users\\Cynthia\\.nuget\\packages\\",
-      "outputPath": "C:\\Fontys repos\\Foeder\\FoederBackend\\FoederAPI\\obj\\",
+      "projectPath": "C:\\Users\\cynth\\Documents\\Fontys repos\\Foeder\\FoederBackend\\FoederAPI\\FoederAPI.csproj",
+      "packagesPath": "C:\\Users\\cynth\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\cynth\\Documents\\Fontys repos\\Foeder\\FoederBackend\\FoederAPI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Cynthia\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\cynth\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -476,8 +494,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Fontys repos\\Foeder\\FoederBackend\\FoederBusiness\\FoederBusiness.csproj": {
-              "projectPath": "C:\\Fontys repos\\Foeder\\FoederBackend\\FoederBusiness\\FoederBusiness.csproj"
+            "C:\\Users\\cynth\\Documents\\Fontys repos\\Foeder\\FoederBackend\\FoederBusiness\\FoederBusiness.csproj": {
+              "projectPath": "C:\\Users\\cynth\\Documents\\Fontys repos\\Foeder\\FoederBackend\\FoederBusiness\\FoederBusiness.csproj"
             }
           }
         }
@@ -521,7 +539,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

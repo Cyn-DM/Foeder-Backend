@@ -1,8 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoederAPI", "FoederAPI\FoederAPI.csproj", "{9339F1C4-5FC4-444C-8644-C7D9ABF6DC1C}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoederAPI", "FoederAPI\FoederAPI.csproj", "{9339F1C4-5FC4-444C-8644-C7D9ABF6DC1C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoederBusiness", "FoederBusiness\FoederBusiness.csproj", "{E26388B5-022C-459E-B068-786170AC94B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoederBusiness", "FoederBusiness\FoederBusiness.csproj", "{E26388B5-022C-459E-B068-786170AC94B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoederDAL", "FoederDAL\FoederDAL.csproj", "{67C9ADC1-D800-4217-865E-E606DF8D2285}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoederDomain", "FoederDomain\FoederDomain.csproj", "{44436E86-AF23-4B1E-8E29-96B93BE9201C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +25,19 @@ Global
 		{E26388B5-022C-459E-B068-786170AC94B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E26388B5-022C-459E-B068-786170AC94B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E26388B5-022C-459E-B068-786170AC94B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67C9ADC1-D800-4217-865E-E606DF8D2285}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67C9ADC1-D800-4217-865E-E606DF8D2285}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67C9ADC1-D800-4217-865E-E606DF8D2285}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67C9ADC1-D800-4217-865E-E606DF8D2285}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44436E86-AF23-4B1E-8E29-96B93BE9201C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44436E86-AF23-4B1E-8E29-96B93BE9201C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44436E86-AF23-4B1E-8E29-96B93BE9201C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44436E86-AF23-4B1E-8E29-96B93BE9201C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1E4120AB-4A06-4389-8814-3C942704F417}
 	EndGlobalSection
 EndGlobal
