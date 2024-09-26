@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
+using FoederBusiness.Dtos;
 using FoederBusiness.Interfaces;
-using FoederBusiness.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoederAPI.Controllers;
@@ -16,7 +16,7 @@ public class RecipeController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<List<Recipe>> GetRecipes()
+    public ActionResult<List<GetRecipesResponse>> GetRecipes()
     {
         return _recipeService.GetRecipes();
     }

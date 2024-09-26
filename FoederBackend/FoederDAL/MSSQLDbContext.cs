@@ -10,5 +10,22 @@ namespace FoederDAL
     public class MssqlDbContext : DbContext
     {
 
+using FoederDomain.DomainModels;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+
+namespace FoederDAL
+{
+    public class MssqlDbContext(IConfiguration config) : DbContext
+        public DbSet<Household> Households { get; set; }
+        public DbSet<Recipe> Recipes { get; set; }
+        public DbSet<Ingredient> Ingredients { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer(config["DbConnectionString"]);
+        }
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
     }
 }

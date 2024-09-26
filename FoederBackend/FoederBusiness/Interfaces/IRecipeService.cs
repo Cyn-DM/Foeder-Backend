@@ -4,5 +4,5 @@ namespace FoederBusiness.Interfaces;
 
 public interface IRecipeService
 {
-    List<Recipe> GetRecipes();
+    List<GetRecipesResponse> GetRecipes();
 }

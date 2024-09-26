@@ -14,8 +14,4 @@
       <ProjectReference Include="..\FoederBusiness\FoederBusiness.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Models\" />
-    </ItemGroup>
-
 </Project>
