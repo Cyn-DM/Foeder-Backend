@@ -1,11 +1,17 @@
 ﻿using FoederBusiness.Interfaces;
-using FoederBusiness.Models;
+using FoederDomain.DomainModels;
+using FoederDomain.Interfaces;
 
 namespace FoederBusiness;
 
 public class RecipeService : IRecipeService
 {
-    public RecipeService(){}
+    private readonly IRecipeRepository _recipeRepository;
+
+    public RecipeService(IRecipeRepository recipeRepository)
+    {
+        this._recipeRepository = recipeRepository;
+    }
 
     private List<Recipe> _recipes = new List<Recipe>()
     {
@@ -143,8 +149,10 @@ public class RecipeService : IRecipeService
         }
     };
 
+    
+
     public List<Recipe> GetRecipes()
     {
-        return _recipes;
+        return _recipeRepository.GetRecipes();
     }
 }
