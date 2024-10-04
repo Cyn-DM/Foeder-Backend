@@ -8,6 +8,17 @@ using FoederDomain.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Localhost",
+        policy =>
+        {
+            policy.WithOrigins("https://localhost:5173")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -54,6 +65,8 @@ using (var scope = app.Services.CreateScope())
         logger.LogError(ex, "An error occurred while seeding the database.");
     }
 }
+
+app.UseCors("Localhost");
 
 app.UseHttpsRedirection();
 
