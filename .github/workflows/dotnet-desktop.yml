@@ -70,7 +70,9 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-
+    - name: Print working directory because github actions be weird
+      run: pwd
+      
     - name: Install Nunit console
       working-directory: ./FoederTest
       run: dotnet add package NUnit.ConsoleRunner --version 3.18.3
