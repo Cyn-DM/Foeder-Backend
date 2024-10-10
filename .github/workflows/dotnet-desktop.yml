@@ -78,7 +78,7 @@ jobs:
     # Execute all unit tests in the solution
     - name: Execute unit tests
       run: |
-          wpd
+          pwd
           dotnet test
 
     # Restore the application to populate the obj folder with RuntimeIdentifiers
