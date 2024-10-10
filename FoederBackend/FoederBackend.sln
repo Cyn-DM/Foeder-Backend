@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoederAPI", "FoederAPI\Foed
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoederBusiness", "FoederBusiness\FoederBusiness.csproj", "{E26388B5-022C-459E-B068-786170AC94B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoederDAL", "FoederDAL\FoederDAL.csproj", "{67C9ADC1-D800-4217-865E-E606DF8D2285}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoederDAL", "FoederDAL\FoederDAL.csproj", "{67C9ADC1-D800-4217-865E-E606DF8D2285}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoederDomain", "FoederDomain\FoederDomain.csproj", "{44436E86-AF23-4B1E-8E29-96B93BE9201C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoederDomain", "FoederDomain\FoederDomain.csproj", "{44436E86-AF23-4B1E-8E29-96B93BE9201C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoederTest", "FoederTest\FoederTest.csproj", "{DF3F4192-797E-4BDA-885B-31D1F4B6F536}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{44436E86-AF23-4B1E-8E29-96B93BE9201C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44436E86-AF23-4B1E-8E29-96B93BE9201C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44436E86-AF23-4B1E-8E29-96B93BE9201C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF3F4192-797E-4BDA-885B-31D1F4B6F536}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF3F4192-797E-4BDA-885B-31D1F4B6F536}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF3F4192-797E-4BDA-885B-31D1F4B6F536}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF3F4192-797E-4BDA-885B-31D1F4B6F536}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
