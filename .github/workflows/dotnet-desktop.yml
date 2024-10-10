@@ -74,11 +74,11 @@ jobs:
       run: pwd
       
     - name: Install Nunit console
-      working-directory: ./FoederTest
+      working-directory: FoederTest
       run: dotnet add package NUnit.ConsoleRunner --version 3.18.3
 
     - name: Run unit tests
-      working-directory: ./FoederTest
+      working-directory: FoederTest
       run: NUNIT3-CONSOLE FoederTest.csproj
 
     # Restore the application to populate the obj folder with RuntimeIdentifiers
