@@ -75,7 +75,7 @@ jobs:
       run: dotnet add package NUnit.ConsoleRunner --version 3.18.3
 
     - name: Run unit tests
-      run: NUNIT3-CONSOLE FoederTest/FoederTest.csproj
+      run: NUNIT3-CONSOLE ./FoederTest/FoederTest.csproj
 
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the application
