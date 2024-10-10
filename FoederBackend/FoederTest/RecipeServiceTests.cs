@@ -20,7 +20,6 @@ namespace FoederTest
 
             _recipeService = serviceProvider.GetService<IRecipeService>()!;
 
-            test
         }
 
         [SetUp]
