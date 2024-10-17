@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FoederBusiness.Interfaces;
+using FoederBusiness.Tools;
 using Google.Apis.Auth;
 
 namespace FoederBusiness.Services
@@ -12,9 +13,9 @@ namespace FoederBusiness.Services
     {
         public AuthService() { }
 
-        public bool VerifyGoogleIdToken(string authToken)
+        public async Task<TokenVerificationResult> VerifyGoogleIdToken(string idToken)
         {
-            GoogleId
+            return await TokenVerifier.VerifyIdToken(idToken);
         }
 
 
