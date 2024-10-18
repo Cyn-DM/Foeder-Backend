@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using FoederBusiness;
 using FoederBusiness.Interfaces;
+using FoederBusiness.Services;
 using FoederDAL.Repository;
 using FoederDomain.Interfaces;
 
@@ -34,6 +35,7 @@ builder.Services.AddSingleton<DbContext>(sp => dbcontext);
 var recipeRepo = new RecipeRepository(dbcontext);
 builder.Services.AddSingleton<IRecipeRepository>(sp => recipeRepo );
 builder.Services.AddSingleton<IRecipeService>(sp => new RecipeService(recipeRepo));
+builder.Services.AddSingleton<IAuthService>(sp => new AuthService());
 
 var app = builder.Build();
 

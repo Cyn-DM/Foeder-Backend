@@ -1,6 +1,8 @@
-﻿namespace FoederBusiness.Interfaces;
+﻿using FoederBusiness.Tools;
+
+namespace FoederBusiness.Interfaces;
 
 public interface IAuthService
 {
-    bool VerifyGoogleIdToken(string authToken);
+    Task<TokenVerificationResult> VerifyGoogleIdToken(string authToken);
 }

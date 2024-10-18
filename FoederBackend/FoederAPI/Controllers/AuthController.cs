@@ -19,11 +19,11 @@ namespace FoederAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> VerifyGoogleIdToken([FromBody] string idToken)
+        public async Task<IActionResult> VerifyGoogleIdToken([FromForm] SignInRequest request)
         {
             try
             {
-                TokenVerificationResult result = await _authService.VerifyGoogleIdToken(idToken);
+                TokenVerificationResult result = await _authService.VerifyGoogleIdToken(request.Credential);
 
                 if (!result.isValid)
                 {
@@ -41,5 +41,10 @@ namespace FoederAPI.Controllers
         }
     }
 
+    
+}
 
+public class SignInRequest
+{
+    public string Credential { get; set; }
 }
