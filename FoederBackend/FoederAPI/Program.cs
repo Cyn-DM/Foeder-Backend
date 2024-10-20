@@ -30,13 +30,13 @@ try
     builder.Configuration.AddUserSecrets<Program>();
     var dbConnectionString = builder.Configuration["DbConnectionString"];
 
-    var dbcontext = new MssqlDbContext(builder.Configuration);
-    builder.Services.AddSingleton<DbContext>(sp => dbcontext);
-    var recipeRepo = new RecipeRepository(dbcontext);
-    builder.Services.AddSingleton<IRecipeRepository>(sp => recipeRepo);
-    builder.Services.AddSingleton<IRecipeService>(sp => new RecipeService(recipeRepo));
+    var dbContext = new MssqlDbContext(builder.Configuration);
+    builder.Services.AddSingleton<DbContext>(sp => dbContext);
     builder.Services.AddSingleton<TokenVerifier>();
+    builder.Services.AddSingleton<IRecipeRepository, RecipeRepository>();
+    builder.Services.AddSingleton<IRecipeService, RecipeService>();
     builder.Services.AddSingleton<IAuthService, AuthService>();
+    builder.Services.AddSingleton<IAuthRepository, AuthRepository>();
 
 
     builder.Services.AddCors(options =>

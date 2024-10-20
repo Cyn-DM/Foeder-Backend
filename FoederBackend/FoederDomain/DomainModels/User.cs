@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace FoederDomain.DomainModels;
 
@@ -13,8 +15,7 @@ public class User
     public string FullName => FirstName + " " + LastName;
     [Key, EmailAddress, MinLength(3), MaxLength(320)]
     public string Email { get; set; } = string.Empty;
-    [Required]
-    public Household Household { get; set; }
+    public Household? Household { get; set; }
 
     public User(){}
 }
