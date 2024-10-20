@@ -19,11 +19,12 @@ namespace FoederAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> VerifyGoogleIdToken([FromForm] SignInRequest request)
+        public async Task<IActionResult> VerifyGoogleIdToken(Response credentialResponse)
         {
             try
             {
-                TokenVerificationResult result = await _authService.VerifyGoogleIdToken(request.Credential);
+                TokenVerificationResult result =
+                    await _authService.VerifyGoogleIdToken(credentialResponse.CredentialResponse);
 
                 if (!result.isValid)
                 {
@@ -34,17 +35,16 @@ namespace FoederAPI.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message);
+                Console.WriteLine(ex.Message);
+                return StatusCode(500);
             }
-
             
         }
     }
 
-    
 }
 
-public class SignInRequest
+public class Response
 {
-    public string Credential { get; set; }
+    public string CredentialResponse { get; set; }
 }

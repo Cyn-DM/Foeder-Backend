@@ -11,13 +11,26 @@ namespace FoederBusiness.Services
 {
     public class AuthService : IAuthService
     {
-        public AuthService() { }
+        private readonly TokenVerifier _tokenVerifier;
+
+        public AuthService(TokenVerifier tokenVerifier)
+        {
+            _tokenVerifier = tokenVerifier;
+        }
 
         public async Task<TokenVerificationResult> VerifyGoogleIdToken(string idToken)
         {
-            return await TokenVerifier.VerifyIdToken(idToken);
+            try
+            {
+                return await _tokenVerifier.VerifyIdToken(idToken);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+            
         }
-
 
     }
 }

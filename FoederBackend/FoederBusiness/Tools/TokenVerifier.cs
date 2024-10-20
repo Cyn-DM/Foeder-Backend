@@ -1,5 +1,8 @@
 ﻿using FoederDomain.DomainModels;
 using Google.Apis.Auth;
+using Google.Apis.Logging;
+using Microsoft.Extensions.Logging;
+using ILogger = Google.Apis.Logging.ILogger;
 
 namespace FoederBusiness.Tools;
 
@@ -13,7 +16,14 @@ public class TokenVerificationResult
 
 public class TokenVerifier
 {
-    public static async Task<TokenVerificationResult> VerifyIdToken(string idToken)
+    private readonly ILogger<TokenVerifier> _logger;
+
+    public TokenVerifier(ILogger<TokenVerifier> logger)
+    {
+        _logger = logger;
+    }
+
+    public async Task<TokenVerificationResult> VerifyIdToken(string idToken)
     {
         var result = new TokenVerificationResult();
 
@@ -28,6 +38,11 @@ public class TokenVerifier
         {
             result.isValid = false;
             result.errorMessage = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw;
         }
 
         return result;
