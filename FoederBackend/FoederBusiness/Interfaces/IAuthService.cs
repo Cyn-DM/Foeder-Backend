@@ -1,8 +1,8 @@
-﻿using FoederBusiness.Tools;
+﻿using FoederDomain.DomainModels;
 
 namespace FoederBusiness.Interfaces;
 
 public interface IAuthService
 {
-    Task<TokenVerificationResult> VerifyGoogleIdToken(string authToken);
+    Task<User?> Login(string authToken);
 }

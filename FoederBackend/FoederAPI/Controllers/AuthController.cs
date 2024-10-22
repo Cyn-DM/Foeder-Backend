@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using FoederBusiness.Interfaces;
 using FoederBusiness.Tools;
+using FoederDomain.DomainModels;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,19 +20,18 @@ namespace FoederAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> VerifyGoogleIdToken(Response credentialResponse)
+        public async Task<IActionResult> LogIn(Response credentialResponse)
         {
             try
             {
-                TokenVerificationResult result =
-                    await _authService.VerifyGoogleIdToken(credentialResponse.CredentialResponse);
+                var user = await _authService.Login(credentialResponse.CredentialResponse);
 
-                if (!result.isValid)
+                if (user == null)
                 {
-                    return Unauthorized(result.errorMessage);
+                    return Unauthorized();
                 }
 
-                return Ok(result.payload);
+                return Ok(user);
             }
             catch (Exception ex)
             {
@@ -41,11 +41,6 @@ namespace FoederAPI.Controllers
             
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> LogIn(Response credentialResponse)
-        //{
-
-        //}
     }
 
 }

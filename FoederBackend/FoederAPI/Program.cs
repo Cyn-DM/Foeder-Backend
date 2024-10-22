@@ -2,6 +2,7 @@ using FoederDAL;
 using Microsoft.EntityFrameworkCore;
 using System;
 using FoederBusiness;
+using FoederBusiness.Helpers;
 using FoederBusiness.Interfaces;
 using FoederBusiness.Services;
 using FoederBusiness.Tools;
@@ -29,6 +30,7 @@ try
     builder.Services.AddSwaggerGen();
     builder.Configuration.AddUserSecrets<Program>();
     var dbConnectionString = builder.Configuration["DbConnectionString"];
+    var jwtSecret = builder.Configuration["JwtSecret"];
 
     var dbContext = new MssqlDbContext(builder.Configuration);
     builder.Services.AddSingleton<DbContext>(sp => dbContext);
@@ -37,6 +39,7 @@ try
     builder.Services.AddSingleton<IRecipeService, RecipeService>();
     builder.Services.AddSingleton<IAuthService, AuthService>();
     builder.Services.AddSingleton<IAuthRepository, AuthRepository>();
+    builder.Services.AddSingleton<AuthSettings>(sp => new AuthSettings(jwtSecret));
 
 
     builder.Services.AddCors(options =>
