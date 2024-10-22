@@ -1,6 +1,7 @@
 using FoederDAL;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Text;
 using FoederBusiness;
 using FoederBusiness.Helpers;
 using FoederBusiness.Interfaces;
@@ -8,6 +9,8 @@ using FoederBusiness.Services;
 using FoederBusiness.Tools;
 using FoederDAL.Repository;
 using FoederDomain.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -23,7 +26,7 @@ try
     builder.Host.UseSerilog();
 
     // Add services to the container.
-
+    
     builder.Services.AddControllers();
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
@@ -31,6 +34,23 @@ try
     builder.Configuration.AddUserSecrets<Program>();
     var dbConnectionString = builder.Configuration["DbConnectionString"];
     var jwtSecret = builder.Configuration["JwtSecret"];
+    builder.Services.AddAuthentication(x =>
+        {
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(x =>
+        {
+            x.SaveToken = true;
+            x.TokenValidationParameters = new TokenValidationParameters
+            {
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSecret!)),
+                ValidateAudience = false,
+                ValidateIssuer = false,
+            };
+
+        });
+    builder.Services.AddAuthorization();
 
     var dbContext = new MssqlDbContext(builder.Configuration);
     builder.Services.AddSingleton<DbContext>(sp => dbContext);
@@ -90,6 +110,8 @@ try
     app.UseHttpsRedirection();
 
     app.UseCors();
+
+    app.UseAuthentication();
 
     app.UseAuthorization();
 
