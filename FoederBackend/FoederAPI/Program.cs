@@ -39,7 +39,7 @@ try
     builder.Services.AddSingleton<IRecipeService, RecipeService>();
     builder.Services.AddSingleton<IAuthService, AuthService>();
     builder.Services.AddSingleton<IAuthRepository, AuthRepository>();
-    builder.Services.AddSingleton<AuthSettings>(sp => new AuthSettings(jwtSecret));
+    builder.Services.AddSingleton<AuthSettings>(sp => new AuthSettings(jwtSecret!));
 
 
     builder.Services.AddCors(options =>
@@ -76,7 +76,7 @@ try
 
 
             // Seed the data
-            var seeder = new DataSeeder(context as MssqlDbContext);
+            var seeder = new DataSeeder(context);
             seeder.Seed();
         }
         catch (Exception ex)

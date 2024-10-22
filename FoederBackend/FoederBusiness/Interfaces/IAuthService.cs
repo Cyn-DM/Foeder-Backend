@@ -4,5 +4,5 @@ namespace FoederBusiness.Interfaces;
 
 public interface IAuthService
 {
-    Task<User?> Login(string authToken);
+    Task<string?> Login(string authToken);
 }

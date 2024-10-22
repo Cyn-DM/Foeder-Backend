@@ -38,7 +38,12 @@ namespace FoederBusiness.Services
         {
             var tokenResult = await _tokenVerifier.VerifyIdToken(idToken);
 
-            if (!tokenResult.isValid)
+            if (tokenResult.IsValid == false)
+            {
+                return null;
+            }
+
+            if (tokenResult.payload == null)
             {
                 return null;
             }

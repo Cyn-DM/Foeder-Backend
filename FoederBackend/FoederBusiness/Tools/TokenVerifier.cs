@@ -8,9 +8,9 @@ namespace FoederBusiness.Tools;
 
 public class TokenVerificationResult
 {
-    public bool isValid { get; set; }
-    public string errorMessage { get; set; }
-    public GoogleJsonWebSignature.Payload payload { get; set; }
+    public bool? IsValid { get; set; }
+    public string? ErrorMessage { get; set; }
+    public GoogleJsonWebSignature.Payload? payload { get; set; }
 
 }
 
@@ -31,13 +31,13 @@ public class TokenVerifier
         {
             var payload = await GoogleJsonWebSignature.ValidateAsync(idToken);
 
-            result.isValid = true;
+            result.IsValid = true;
             result.payload = payload;
         }
         catch (InvalidJwtException ex)
         {
-            result.isValid = false;
-            result.errorMessage = ex.Message;
+            result.IsValid = false;
+            result.ErrorMessage = ex.Message;
         }
         catch (Exception ex)
         {

@@ -15,7 +15,7 @@ public class AuthRepository : IAuthRepository
 
     public User FindOrCreateUser(User user)
     {
-        User dbUser = _context.Find<User>(user);
+        User? dbUser = _context.Find<User>(user);
 
         if (dbUser == null)
         {

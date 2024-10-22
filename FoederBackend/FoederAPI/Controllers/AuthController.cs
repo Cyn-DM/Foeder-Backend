@@ -1,4 +1,5 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System.ComponentModel.DataAnnotations;
+using System.IdentityModel.Tokens.Jwt;
 using FoederBusiness.Interfaces;
 using FoederBusiness.Tools;
 using FoederDomain.DomainModels;
@@ -47,5 +48,5 @@ namespace FoederAPI.Controllers
 
 public class Response
 {
-    public string CredentialResponse { get; set; }
+    public required string CredentialResponse { get; set; }
 }
