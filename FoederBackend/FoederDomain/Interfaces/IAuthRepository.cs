@@ -4,5 +4,7 @@ namespace FoederDomain.Interfaces;
 
 public interface IAuthRepository
 {
-    User FindOrCreateUser(User user);
+    Task<User> FindOrCreateUser(User user);
+    Task<RefreshToken?> GetStoredRefreshToken(string refreshToken);
+    void StoreRefreshToken(RefreshToken refreshToken);
 }

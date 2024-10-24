@@ -17,8 +17,8 @@ public class RecipeController : ControllerBase
 
     [HttpGet]
     [Authorize]
-    public ActionResult<List<GetRecipesResponse>> GetRecipes()
+    public async Task<ActionResult<List<GetRecipesResponse>>> GetRecipes()
     {
-        return _recipeService.GetRecipes();
+        return await _recipeService.GetRecipes();
     }
 }

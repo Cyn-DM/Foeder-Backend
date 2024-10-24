@@ -28,11 +28,12 @@ namespace FoederTest
         }
 
         [Test]
-        public void AssertGetRecipeResponses()
+        public async Task AssertGetRecipeResponses()
         {
-            List<GetRecipesResponse> responses = _recipeService.GetRecipes();
+            List<GetRecipesResponse> responses = await _recipeService.GetRecipes();
 
             Assert.IsNotEmpty(responses);
+            
         }
     }
 }

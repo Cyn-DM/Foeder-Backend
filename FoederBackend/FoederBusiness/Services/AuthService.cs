@@ -1,13 +1,8 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using FoederBusiness.Dtos;
-using FoederBusiness.Helpers;
+﻿using FoederBusiness.Dtos;
 using FoederBusiness.Interfaces;
 using FoederBusiness.Tools;
 using FoederDomain.DomainModels;
 using FoederDomain.Interfaces;
-using Microsoft.IdentityModel.Tokens;
 
 namespace FoederBusiness.Services
 {
@@ -24,7 +19,7 @@ namespace FoederBusiness.Services
             _jwtAuthTokenUtils = jwtAuthTokenUtils;
         }
 
-        public async Task<TokenResult?> Login(string idToken)
+        public async Task<LoginTokenResult?> Login(string idToken)
         {
             var tokenResult = await _googleTokenVerifier.VerifyIdToken(idToken);
 
@@ -33,29 +28,45 @@ namespace FoederBusiness.Services
                 return null;
             }
 
-            if (tokenResult.payload == null)
-            {
-                return null;
-            }
-
             User verifiedGoogleUser = new User()
             {
-                Email = tokenResult.payload.Email,
+                Email = tokenResult.payload!.Email,
                 FirstName = tokenResult.payload.GivenName,
                 LastName = tokenResult.payload.FamilyName,
             };
 
-            User foederUser = FindOrCreateUser(verifiedGoogleUser);
+            User foederUser = await _authRepo.FindOrCreateUser(verifiedGoogleUser);
             string accessToken = _jwtAuthTokenUtils.GenerateAccessToken(foederUser);
             string refreshToken = _jwtAuthTokenUtils.GenerateRefreshToken();
-
-
-            return new TokenResult() { AccessToken = accessToken, RefreshToken = refreshToken };
-
+            
+            _authRepo.StoreRefreshToken(new RefreshToken(){ Token = refreshToken, User = foederUser });
+            
+            return new LoginTokenResult() { AccessToken = accessToken, RefreshToken = refreshToken };
         }
-        private User FindOrCreateUser(User user)
+
+        public async Task<RefreshResult?> Refresh(string refreshToken)
         {
-            return _authRepo.FindOrCreateUser(user);
+            var storedRefreshToken = await _authRepo.GetStoredRefreshToken(refreshToken);
+            var refreshResult = new RefreshResult();
+            
+            if (storedRefreshToken == null)
+            {
+                refreshResult.isRefreshTokenFound = false;
+                return refreshResult;
+            }
+            
+            if (storedRefreshToken.ExpirationDate < DateTime.Now)
+            {
+                refreshResult.IsRefreshTokenExpired = true;
+            }
+            
+            refreshResult.AccessToken = _jwtAuthTokenUtils.GenerateAccessToken(storedRefreshToken.User);
+            refreshResult.isRefreshTokenFound = true;
+            refreshResult.IsRefreshTokenExpired = false;
+            
+            return refreshResult;
         }
+        
+
     }
 }

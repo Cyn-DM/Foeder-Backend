@@ -26,8 +26,6 @@ namespace FoederAPI.Controllers
                     return Unauthorized();
                 }
                 
-                
-                
                 return Ok(tokenResult);
             }
             catch (Exception ex)
@@ -36,7 +34,32 @@ namespace FoederAPI.Controllers
                 return StatusCode(500);
             }
         }
-        
+
+        public async Task<IActionResult> Refresh(string refreshToken)
+        {
+            try
+            {
+                var result = await _authService.Refresh(refreshToken);
+
+                if (!result!.isRefreshTokenFound)
+                {
+                    return StatusCode(500);
+                }
+
+                if (result.IsRefreshTokenExpired)
+                {
+                    return Unauthorized();
+                }
+
+                return Ok(result.AccessToken);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500);
+            }
+            
+        }
         
     }
 

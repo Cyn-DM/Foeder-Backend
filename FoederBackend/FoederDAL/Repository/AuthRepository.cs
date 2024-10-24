@@ -13,9 +13,9 @@ public class AuthRepository : IAuthRepository
         this._context = context;
     }
 
-    public User FindOrCreateUser(User user)
+    public async Task<User> FindOrCreateUser(User user)
     {
-        User? dbUser = _context.Find<User>(user.Email);
+        User? dbUser = await _context.FindAsync<User>(user.Email);
 
         if (dbUser == null)
         {
@@ -27,8 +27,22 @@ public class AuthRepository : IAuthRepository
         return dbUser;
     }
 
-    // public RefreshToken? GetStoredRefreshToken(string refreshToken)
-    // {
-    //     
-    // }
+    public async Task<RefreshToken?> GetStoredRefreshToken(string refreshToken)
+    {
+        return await _context.RefreshTokens.FindAsync(refreshToken);
+    }
+
+    public void StoreRefreshToken(RefreshToken refreshToken)
+    {
+        if (_context.RefreshTokens.Find(refreshToken.Token) == null)
+        {
+            _context.RefreshTokens.Add(refreshToken);
+            _context.SaveChanges();
+        }
+        else
+        {
+            throw new Exception("Refresh token already exists");
+        }
+        
+    }
 }
