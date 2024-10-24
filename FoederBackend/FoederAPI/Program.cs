@@ -58,13 +58,13 @@ try
         });
     builder.Services.AddAuthorization();
 
-    var dbContext = new MssqlDbContext(builder.Configuration);
-    builder.Services.AddSingleton<DbContext, MssqlDbContext>();
-    builder.Services.AddSingleton<GoogleTokenVerifier>();
-    builder.Services.AddSingleton<IRecipeRepository, RecipeRepository>();
-    builder.Services.AddSingleton<IRecipeService, RecipeService>();
-    builder.Services.AddSingleton<IAuthService, AuthService>();
-    builder.Services.AddSingleton<IAuthRepository, AuthRepository>();
+    builder.Services.AddDbContext<MssqlDbContext>(options => options.UseSqlServer(dbConnectionString));
+    builder.Services.AddScoped<JwtAuthTokenUtils>();
+    builder.Services.AddScoped<GoogleTokenVerifier>();
+    builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
+    builder.Services.AddScoped<IRecipeService, RecipeService>();
+    builder.Services.AddScoped<IAuthService, AuthService>();
+    builder.Services.AddScoped<IAuthRepository, AuthRepository>();
     builder.Services.AddSingleton<AuthSettings>(sp => new AuthSettings(jwtSecret ?? throw new Exception("Add jwtSecret."),
         jwtIssuer ?? throw new Exception("Add issuer."),
         jwtAudience ?? throw new Exception("Add audience."),
@@ -101,7 +101,7 @@ try
         var services = scope.ServiceProvider;
         try
         {
-            var context = services.GetRequiredService<DbContext>();
+            var context = services.GetRequiredService<MssqlDbContext>();
 
 
             // Seed the data

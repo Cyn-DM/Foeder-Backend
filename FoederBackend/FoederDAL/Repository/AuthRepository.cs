@@ -6,9 +6,9 @@ namespace FoederDAL.Repository;
 
 public class AuthRepository : IAuthRepository
 {
-    private readonly DbContext _context;
+    private readonly MssqlDbContext _context;
 
-    public AuthRepository(DbContext context)
+    public AuthRepository(MssqlDbContext context)
     {
         this._context = context;
     }
@@ -26,4 +26,9 @@ public class AuthRepository : IAuthRepository
 
         return dbUser;
     }
+
+    // public RefreshToken? GetStoredRefreshToken(string refreshToken)
+    // {
+    //     
+    // }
 }

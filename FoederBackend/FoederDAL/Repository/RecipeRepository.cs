@@ -8,13 +8,9 @@ namespace FoederDAL.Repository
     {
         private readonly MssqlDbContext? _context;
 
-        public RecipeRepository(DbContext context)
+        public RecipeRepository(MssqlDbContext context)
         {
-            if (context is MssqlDbContext dbContext)
-            {
-                this._context = dbContext;
-            }
-            
+                this._context = context;
         }
 
         public List<Recipe> GetRecipes()
