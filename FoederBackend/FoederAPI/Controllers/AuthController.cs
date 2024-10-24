@@ -35,6 +35,7 @@ namespace FoederAPI.Controllers
             }
         }
 
+        [HttpPost]
         public async Task<IActionResult> Refresh(string refreshToken)
         {
             try
