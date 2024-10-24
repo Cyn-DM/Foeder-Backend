@@ -5,21 +5,14 @@ namespace FoederAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController(IAuthService authService) : ControllerBase
     {
-        private readonly IAuthService _authService;
-
-        public AuthController(IAuthService authService)
-        {
-            this._authService = authService;
-        }
-
         [HttpPost]
         public async Task<IActionResult> LogIn(Response credentialResponse)
         {
             try
             {
-                var tokenResult = await _authService.Login(credentialResponse.CredentialResponse);
+                var tokenResult = await authService.Login(credentialResponse.CredentialResponse);
 
                 if (tokenResult == null)
                 {
@@ -40,7 +33,7 @@ namespace FoederAPI.Controllers
         {
             try
             {
-                var result = await _authService.Refresh(refreshToken);
+                var result = await authService.Refresh(refreshToken);
 
                 if (!result!.isRefreshTokenFound)
                 {
@@ -68,5 +61,6 @@ namespace FoederAPI.Controllers
 
 public class Response
 {
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
     public required string CredentialResponse { get; set; }
 }
