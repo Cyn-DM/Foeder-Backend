@@ -1,8 +1,5 @@
-﻿using FoederDomain.DomainModels;
-using Google.Apis.Auth;
-using Google.Apis.Logging;
+﻿using Google.Apis.Auth;
 using Microsoft.Extensions.Logging;
-using ILogger = Google.Apis.Logging.ILogger;
 
 namespace FoederBusiness.Tools;
 
@@ -14,11 +11,11 @@ public class TokenVerificationResult
 
 }
 
-public class TokenVerifier
+public class GoogleTokenVerifier
 {
-    private readonly ILogger<TokenVerifier> _logger;
+    private readonly ILogger<GoogleTokenVerifier> _logger;
 
-    public TokenVerifier(ILogger<TokenVerifier> logger)
+    public GoogleTokenVerifier(ILogger<GoogleTokenVerifier> logger)
     {
         _logger = logger;
     }

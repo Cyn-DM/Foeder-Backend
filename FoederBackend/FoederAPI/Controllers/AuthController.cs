@@ -1,10 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.IdentityModel.Tokens.Jwt;
-using FoederBusiness.Interfaces;
-using FoederBusiness.Tools;
-using FoederDomain.DomainModels;
-using Google.Apis.Auth;
-using Microsoft.AspNetCore.Http;
+﻿using FoederBusiness.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoederAPI.Controllers
@@ -25,23 +19,25 @@ namespace FoederAPI.Controllers
         {
             try
             {
-                var user = await _authService.Login(credentialResponse.CredentialResponse);
+                var tokenResult = await _authService.Login(credentialResponse.CredentialResponse);
 
-                if (user == null)
+                if (tokenResult == null)
                 {
                     return Unauthorized();
                 }
-
-                return Ok(user);
+                
+                
+                
+                return Ok(tokenResult);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return StatusCode(500);
             }
-            
         }
-
+        
+        
     }
 
 }

@@ -1,8 +1,8 @@
-﻿using FoederDomain.DomainModels;
+﻿using FoederBusiness.Dtos;
 
 namespace FoederBusiness.Interfaces;
 
 public interface IAuthService
 {
-    Task<string?> Login(string authToken);
+    Task<TokenResult?> Login(string authToken);
 }

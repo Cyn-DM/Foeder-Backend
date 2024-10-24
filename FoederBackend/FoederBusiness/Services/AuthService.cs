@@ -1,42 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
+using FoederBusiness.Dtos;
 using FoederBusiness.Helpers;
 using FoederBusiness.Interfaces;
 using FoederBusiness.Tools;
 using FoederDomain.DomainModels;
 using FoederDomain.Interfaces;
-using Google.Apis.Auth;
 using Microsoft.IdentityModel.Tokens;
 
 namespace FoederBusiness.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly TokenVerifier _tokenVerifier;
+        private readonly GoogleTokenVerifier _googleTokenVerifier;
         private readonly IAuthRepository _authRepo;
-        private readonly AuthSettings _authSettings;
+        private readonly JwtAuthTokenUtils _jwtAuthTokenUtils;
 
-        public AuthService(TokenVerifier tokenVerifier, IAuthRepository authRepo, AuthSettings authSettings)
+        public AuthService(GoogleTokenVerifier googleTokenVerifier, IAuthRepository authRepo, JwtAuthTokenUtils jwtAuthTokenUtils)
         {
-            _tokenVerifier = tokenVerifier;
+            _googleTokenVerifier = googleTokenVerifier;
             _authRepo = authRepo;
-            _authSettings = authSettings;
+            _jwtAuthTokenUtils = jwtAuthTokenUtils;
         }
 
-        public async Task<TokenVerificationResult> VerifyGoogleIdToken(string idToken)
+        public async Task<TokenResult?> Login(string idToken)
         {
-            return await _tokenVerifier.VerifyIdToken(idToken);
-            
-        }
-
-        public async Task<string?> Login(string idToken)
-        {
-            var tokenResult = await _tokenVerifier.VerifyIdToken(idToken);
+            var tokenResult = await _googleTokenVerifier.VerifyIdToken(idToken);
 
             if (tokenResult.IsValid == false)
             {
@@ -56,49 +46,16 @@ namespace FoederBusiness.Services
             };
 
             User foederUser = FindOrCreateUser(verifiedGoogleUser);
+            string accessToken = _jwtAuthTokenUtils.GenerateAccessToken(foederUser);
+            string refreshToken = _jwtAuthTokenUtils.GenerateRefreshToken();
 
-            string token = GenerateToken(foederUser);
 
-            return token;
+            return new TokenResult() { AccessToken = accessToken, RefreshToken = refreshToken };
 
         }
         private User FindOrCreateUser(User user)
         {
             return _authRepo.FindOrCreateUser(user);
         }
-
-        public string GenerateToken(User user)
-        {
-            var handler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_authSettings.PrivateKey);
-            var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = GenerateClaims(user),
-                Expires = DateTime.UtcNow.AddHours(1),
-                SigningCredentials = credentials,
-            };
-
-            var token = handler.CreateToken(tokenDescriptor);
-            return handler.WriteToken(token);
-        }
-
-        private static ClaimsIdentity GenerateClaims(User user)
-        {
-            var claims = new ClaimsIdentity();
-            claims.AddClaim(new Claim(ClaimTypes.Name, user.FullName));
-            claims.AddClaim(new Claim(ClaimTypes.Email, user.Email));
-            if (user.Household != null)
-            {
-                claims.AddClaim(new Claim("HouseholdId", user.Household.Id.ToString()));
-            }
-
-            return claims;
-
-        }
-
     }
-
-
 }

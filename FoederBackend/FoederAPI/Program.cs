@@ -1,6 +1,5 @@
 using FoederDAL;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Text;
 using FoederBusiness;
 using FoederBusiness.Helpers;
@@ -33,7 +32,10 @@ try
     builder.Services.AddSwaggerGen();
     builder.Configuration.AddUserSecrets<Program>();
     var dbConnectionString = builder.Configuration["DbConnectionString"];
-    var jwtSecret = builder.Configuration["JwtSecret"];
+    var jwtSecret = builder.Configuration["JwtSettings:SecretKey"];
+    var jwtIssuer = builder.Configuration["JwtSettings:Issuer"];
+    var jwtAudience = builder.Configuration["JwtSettings:Audience"];
+    var jwtExpiration = builder.Configuration["JwtSettings:Expiration"];
     builder.Services.AddAuthentication(x =>
         {
             x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -45,21 +47,28 @@ try
             x.TokenValidationParameters = new TokenValidationParameters
             {
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSecret!)),
-                ValidateAudience = false,
-                ValidateIssuer = false,
+                ValidateAudience = true,
+                ValidateIssuer = true,
+                ValidateIssuerSigningKey = true,
+                ValidateLifetime = true,
+                ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+                ValidAudience = builder.Configuration["JwtSettings:Audience"],
             };
 
         });
     builder.Services.AddAuthorization();
 
     var dbContext = new MssqlDbContext(builder.Configuration);
-    builder.Services.AddSingleton<DbContext>(sp => dbContext);
-    builder.Services.AddSingleton<TokenVerifier>();
+    builder.Services.AddSingleton<DbContext, MssqlDbContext>();
+    builder.Services.AddSingleton<GoogleTokenVerifier>();
     builder.Services.AddSingleton<IRecipeRepository, RecipeRepository>();
     builder.Services.AddSingleton<IRecipeService, RecipeService>();
     builder.Services.AddSingleton<IAuthService, AuthService>();
     builder.Services.AddSingleton<IAuthRepository, AuthRepository>();
-    builder.Services.AddSingleton<AuthSettings>(sp => new AuthSettings(jwtSecret!));
+    builder.Services.AddSingleton<AuthSettings>(sp => new AuthSettings(jwtSecret ?? throw new Exception("Add jwtSecret."),
+        jwtIssuer ?? throw new Exception("Add issuer."),
+        jwtAudience ?? throw new Exception("Add audience."),
+        jwtExpiration ?? throw new Exception("Add expiration.")));
 
 
     builder.Services.AddCors(options =>
@@ -77,7 +86,7 @@ try
 
     app.UseSerilogRequestLogging();
 
-    app.MapGet("/", () => dbConnectionString);
+    app.MapGet("/", () => Results.Redirect("/swagger"));
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
