@@ -1,5 +1,9 @@
-﻿using FoederBusiness.Interfaces;
+﻿using System.Net;
+using FoederBusiness.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
+using System.Net.Http;
+using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
 namespace FoederAPI.Controllers
 {
@@ -7,7 +11,8 @@ namespace FoederAPI.Controllers
     [ApiController]
     public class AuthController(IAuthService authService) : ControllerBase
     {
-        [HttpPost]
+        [HttpPost("login")]
+        
         public async Task<IActionResult> LogIn(Response credentialResponse)
         {
             try
@@ -18,8 +23,20 @@ namespace FoederAPI.Controllers
                 {
                     return Unauthorized();
                 }
+
+                var cookieOptions = new CookieOptions()
+                {
+                    Expires = DateTimeOffset.Now.AddDays(1),
+                    Domain = "localhost",
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Lax,
+                    Path = "/"
+                };
                 
-                return Ok(tokenResult);
+                HttpContext.Response.Cookies.Append("refreshToken", tokenResult.RefreshToken, cookieOptions);
+                
+                return Ok(tokenResult.AccessToken);
             }
             catch (Exception ex)
             {
@@ -28,7 +45,7 @@ namespace FoederAPI.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("refresh")]
         public async Task<IActionResult> Refresh(string refreshToken)
         {
             try

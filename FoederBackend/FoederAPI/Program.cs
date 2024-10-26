@@ -35,7 +35,7 @@ try
     var jwtSecret = builder.Configuration["JwtSettings:SecretKey"];
     var jwtIssuer = builder.Configuration["JwtSettings:Issuer"];
     var jwtAudience = builder.Configuration["JwtSettings:Audience"];
-    var jwtExpiration = builder.Configuration["JwtSettings:Expiration"];
+    var jwtExpiration = builder.Configuration["JwtSettings:AccessTokenExpiration"];
     builder.Services.AddAuthentication(x =>
         {
             x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -78,7 +78,8 @@ try
             {
                 policy.WithOrigins("https://localhost:5173")
                     .AllowAnyHeader()
-                    .AllowAnyMethod();
+                    .AllowAnyMethod()
+                    .AllowCredentials();
             });
     });
 
