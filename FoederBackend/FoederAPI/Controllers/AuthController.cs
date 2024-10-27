@@ -3,6 +3,7 @@ using FoederBusiness.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using System.Net.Http;
+using System.Web;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
 namespace FoederAPI.Controllers
@@ -26,12 +27,13 @@ namespace FoederAPI.Controllers
 
                 var cookieOptions = new CookieOptions()
                 {
-                    Expires = DateTimeOffset.Now.AddDays(1),
+                    Expires = DateTimeOffset.Now.AddDays(7),
                     Domain = "localhost",
                     HttpOnly = true,
                     Secure = true,
                     SameSite = SameSiteMode.Lax,
-                    Path = "/"
+                    Path = "/",
+                    IsEssential = true,
                 };
                 
                 HttpContext.Response.Cookies.Append("refreshToken", tokenResult.RefreshToken, cookieOptions);
@@ -45,12 +47,19 @@ namespace FoederAPI.Controllers
             }
         }
 
-        [HttpPost("refresh")]
-        public async Task<IActionResult> Refresh(string refreshToken)
+        [HttpGet("refresh")]
+        public async Task<IActionResult> Refresh()
         {
+            if (!HttpContext.Request.Cookies.TryGetValue("refreshToken", out var refreshToken))
+            {
+                return Unauthorized();
+            }
+            
+            var decodedToken = HttpUtility.UrlDecode(refreshToken);
+            
             try
             {
-                var result = await authService.Refresh(refreshToken);
+                var result = await authService.Refresh(decodedToken);
 
                 if (!result!.isRefreshTokenFound)
                 {
