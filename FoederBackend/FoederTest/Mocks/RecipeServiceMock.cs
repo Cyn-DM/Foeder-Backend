@@ -13,9 +13,9 @@ public class RecipeServiceMock : IRecipeService
         _recipeRepository = recipeRepository;
     }
 
-    public List<GetRecipesResponse> GetRecipes()
+    public async Task<List<GetRecipesResponse>> GetRecipes()
     {
-        List<Recipe> domainRecipes = _recipeRepository.GetRecipes();
+        List<Recipe> domainRecipes = await _recipeRepository.GetRecipes();
         List<GetRecipesResponse> recipeDtos = new();
 
         if (domainRecipes.Count == 0)

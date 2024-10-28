@@ -4,6 +4,7 @@ using FoederDAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoederDAL.Migrations
 {
     [DbContext(typeof(MssqlDbContext))]
-    partial class MssqlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241020173524_RemovedRequirementHousehold")]
+    partial class RemovedRequirementHousehold
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,25 +97,6 @@ namespace FoederDAL.Migrations
                     b.ToTable("Recipes");
                 });
 
-            modelBuilder.Entity("FoederDomain.DomainModels.RefreshToken", b =>
-                {
-                    b.Property<string>("Token")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("ExpirationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(320)");
-
-                    b.HasKey("Token");
-
-                    b.HasIndex("UserEmail");
-
-                    b.ToTable("RefreshTokens");
-                });
-
             modelBuilder.Entity("FoederDomain.DomainModels.User", b =>
                 {
                     b.Property<string>("Email")
@@ -155,17 +139,6 @@ namespace FoederDAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Household");
-                });
-
-            modelBuilder.Entity("FoederDomain.DomainModels.RefreshToken", b =>
-                {
-                    b.HasOne("FoederDomain.DomainModels.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserEmail")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("FoederDomain.DomainModels.User", b =>

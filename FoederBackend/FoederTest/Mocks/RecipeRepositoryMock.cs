@@ -175,7 +175,7 @@ public class RecipeRepositoryMock : IRecipeRepository
 
     }
 
-    public List<Recipe> GetRecipes()
+    public async Task<List<Recipe>> GetRecipes()
     {
         return _recipes;
     }

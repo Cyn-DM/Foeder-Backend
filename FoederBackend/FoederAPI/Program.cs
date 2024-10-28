@@ -1,77 +1,141 @@
 using FoederDAL;
 using Microsoft.EntityFrameworkCore;
-using System;
+using System.Text;
 using FoederBusiness;
+using FoederBusiness.Helpers;
 using FoederBusiness.Interfaces;
+using FoederBusiness.Services;
+using FoederBusiness.Tools;
 using FoederDAL.Repository;
 using FoederDomain.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .WriteTo.Console()
+    .CreateLogger();
 
-builder.Services.AddCors(options =>
+try
 {
-    options.AddPolicy("Localhost",
-        policy =>
+    Log.Information("Starting API.");
+
+    var builder = WebApplication.CreateBuilder(args);
+    builder.Host.UseSerilog();
+
+    // Add services to the container.
+    
+    builder.Services.AddControllers();
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+    builder.Configuration.AddUserSecrets<Program>();
+    var dbConnectionString = builder.Configuration["DbConnectionString"];
+    var jwtSecret = builder.Configuration["JwtSettings:SecretKey"];
+    var jwtIssuer = builder.Configuration["JwtSettings:Issuer"];
+    var jwtAudience = builder.Configuration["JwtSettings:Audience"];
+    var jwtExpiration = builder.Configuration["JwtSettings:AccessTokenExpiration"];
+    builder.Services.AddAuthentication(x =>
         {
-            policy.WithOrigins("https://localhost:5173")
-                .AllowAnyHeader()
-                .AllowAnyMethod();
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(x =>
+        {
+            x.SaveToken = true;
+            x.TokenValidationParameters = new TokenValidationParameters
+            {
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSecret!)),
+                ValidateAudience = true,
+                ValidateIssuer = true,
+                ValidateIssuerSigningKey = true,
+                ValidateLifetime = true,
+                ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+                ValidAudience = builder.Configuration["JwtSettings:Audience"],
+            };
+
         });
-});
+    builder.Services.AddAuthorization();
 
-// Add services to the container.
+    builder.Services.AddDbContext<MssqlDbContext>(options => options.UseSqlServer(dbConnectionString));
+    builder.Services.AddScoped<JwtAuthTokenUtils>();
+    builder.Services.AddScoped<GoogleTokenVerifier>();
+    builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
+    builder.Services.AddScoped<IRecipeService, RecipeService>();
+    builder.Services.AddScoped<IAuthService, AuthService>();
+    builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+    builder.Services.AddSingleton<AuthSettings>(sp => new AuthSettings(jwtSecret ?? throw new Exception("Add jwtSecret."),
+        jwtIssuer ?? throw new Exception("Add issuer."),
+        jwtAudience ?? throw new Exception("Add audience."),
+        jwtExpiration ?? throw new Exception("Add expiration.")));
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Logging.AddConsole();
-builder.Services.AddSwaggerGen();
-builder.Configuration.AddUserSecrets<Program>();
-var dbConnectionString = builder.Configuration["DbConnectionString"];
 
-var dbcontext = new MssqlDbContext(builder.Configuration);
-builder.Services.AddSingleton<DbContext>(sp => dbcontext);
-var recipeRepo = new RecipeRepository(dbcontext);
-builder.Services.AddSingleton<IRecipeRepository>(sp => recipeRepo );
-builder.Services.AddSingleton<IRecipeService>(sp => new RecipeService(recipeRepo));
+    builder.Services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(
+            policy =>
+            {
+                policy.WithOrigins("https://localhost:5173")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+            });
+    });
 
-var app = builder.Build();
+    var app = builder.Build();
 
-app.MapGet("/", () => dbConnectionString);
+    app.UseSerilogRequestLogging();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+    app.MapGet("/", () => Results.Redirect("/swagger"));
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+
+    }
+
+    using (var scope = app.Services.CreateScope())
+    {
+        var services = scope.ServiceProvider;
+        try
+        {
+            var context = services.GetRequiredService<MssqlDbContext>();
+
+
+            // Seed the data
+            var seeder = new DataSeeder(context);
+            seeder.Seed();
+        }
+        catch (Exception ex)
+        {
+            var logger = services.GetRequiredService<ILogger<Program>>();
+            logger.LogError(ex, "An error occurred while seeding the database.");
+        }
+    }
+
+
+    app.UseHttpsRedirection();
+
+    app.UseCors();
+
+    app.UseAuthentication();
+
+    app.UseAuthorization();
+
+    app.MapControllers();
+
+    app.Run();
+}
+catch (Exception ex)
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-   
+    Log.Fatal(ex, "Application terminated unexpectedly.");
+}
+finally
+{
+    Log.CloseAndFlush();
 }
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    try
-    {
-        var context = services.GetRequiredService<DbContext>();
 
-
-        // Seed the data
-        var seeder = new DataSeeder(context as MssqlDbContext);
-        seeder.Seed();
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while seeding the database.");
-    }
-}
-
-app.UseCors("Localhost");
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
