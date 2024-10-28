@@ -177,7 +177,7 @@ public class DataSeeder
                         "Cook ground beef",
                         "Mix with tomato sauce"
                     },
-                    Household = _context.Find<Household>(Guid.Parse("038295A8-2CE9-44A3-F188-08DCE3C81856"))!
+                    Household = _context.Find<Household>(Guid.Parse("7F2C62D4-6CB2-411F-1004-08DCF7630642"))!
                 },
                 new Recipe
                 {
@@ -195,7 +195,7 @@ public class DataSeeder
                         "Add curry powder",
                         "Pour in coconut milk and simmer"
                     },
-                    Household = _context.Find<Household>(Guid.Parse("A8FA6CAB-114F-4B83-F189-08DCE3C81856"))!
+                    Household = _context.Find<Household>(Guid.Parse("BADF0B5A-31A7-4F59-1005-08DCF7630642"))!
                 },
                 new Recipe
                 {
@@ -213,7 +213,7 @@ public class DataSeeder
                         "Stir-fry in a pan",
                         "Add soy sauce"
                     },
-                    Household = _context.Find<Household>(Guid.Parse("A8F4B750-96F4-4BD5-F18A-08DCE3C81856"))!
+                    Household = _context.Find<Household>(Guid.Parse("630D02EF-AFE9-4B16-1006-08DCF7630642"))!
                 },
                 new Recipe
                 {
@@ -231,7 +231,7 @@ public class DataSeeder
                         "Add vegetables",
                         "Simmer in broth"
                     },
-                    Household = _context.Find<Household>(Guid.Parse("B993C05D-6499-401F-F18B-08DCE3C81856"))!
+                    Household = _context.Find<Household>(Guid.Parse("14472595-9967-40A7-1007-08DCF7630642"))!
                 },
                 new Recipe
                 {
@@ -249,7 +249,7 @@ public class DataSeeder
                         "Cook on a griddle",
                         "Serve with syrup"
                     },
-                    Household = _context.Find<Household>(Guid.Parse("0EEEA997-3541-44FE-F18C-08DCE3C81856"))!
+                    Household = _context.Find<Household>(Guid.Parse("C2CE3E8C-0399-4DAA-1008-08DCF7630642"))!
                 },
                 new Recipe
                 {
@@ -267,7 +267,7 @@ public class DataSeeder
                         "Assemble tacos",
                         "Serve with toppings"
                     },
-                    Household = _context.Find<Household>(Guid.Parse("A052863E-37C2-402D-F18D-08DCE3C81856"))!
+                    Household = _context.Find<Household>(Guid.Parse("80AE07DA-EC4F-4E34-1009-08DCF7630642"))!
                 },
                 new Recipe
                 {
@@ -285,7 +285,7 @@ public class DataSeeder
                         "Add croutons",
                         "Toss with dressing"
                     },
-                    Household = _context.Find<Household>(Guid.Parse("34652C8E-7101-4AB3-F18E-08DCE3C81856"))!
+                    Household = _context.Find<Household>(Guid.Parse("C79F5EC0-84D3-4DC7-100A-08DCF7630642"))!
                 },
                 new Recipe
                 {
@@ -303,7 +303,7 @@ public class DataSeeder
                         "Add cheese",
                         "Grill until golden"
                     },
-                    Household = _context.Find<Household>(Guid.Parse("F9A2C068-F77C-494F-F18F-08DCE3C81856"))!
+                    Household = _context.Find<Household>(Guid.Parse("52B1AED2-1FEA-4D02-100B-08DCF7630642"))!
                 },
                 new Recipe
                 {
@@ -321,7 +321,7 @@ public class DataSeeder
                         "Layer with sauce and cheese",
                         "Bake until bubbly"
                     },
-                    Household = _context.Find<Household>(Guid.Parse("5947B20F-E2D3-4821-F190-08DCE3C81856"))!
+                    Household = _context.Find<Household>(Guid.Parse("174E7312-FAE1-4D3C-100C-08DCF7630642"))!
                 },
                 new Recipe
                 {
@@ -339,7 +339,7 @@ public class DataSeeder
                         "Add beans and spices",
                         "Simmer for 30 minutes"
                     },
-                    Household = _context.Find<Household>(Guid.Parse("CE54EB65-3FA4-44FA-F191-08DCE3C81856"))!
+                    Household = _context.Find<Household>(Guid.Parse("339FBBA1-4F92-477F-100D-08DCF7630642"))!
                 });
 
             _context.SaveChanges();
