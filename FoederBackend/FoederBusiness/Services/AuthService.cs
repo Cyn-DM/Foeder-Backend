@@ -35,7 +35,7 @@ namespace FoederBusiness.Services
                 LastName = tokenResult.payload.FamilyName,
             };
 
-            User foederUser = await _authRepo.FindOrCreateUser(verifiedGoogleUser);
+            User foederUser = await _authRepo.FindOrCreateUser(verifiedGoogleUser); 
             string accessToken = _jwtAuthTokenUtils.GenerateAccessToken(foederUser);
             string refreshToken = _jwtAuthTokenUtils.GenerateRefreshToken();
             
