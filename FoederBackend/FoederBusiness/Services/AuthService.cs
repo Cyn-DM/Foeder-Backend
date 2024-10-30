@@ -8,11 +8,11 @@ namespace FoederBusiness.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly GoogleTokenVerifier _googleTokenVerifier;
+        private readonly IGoogleTokenVerifier _googleTokenVerifier;
         private readonly IAuthRepository _authRepo;
-        private readonly JwtAuthTokenUtils _jwtAuthTokenUtils;
+        private readonly IJwtAuthTokenUtils _jwtAuthTokenUtils;
 
-        public AuthService(GoogleTokenVerifier googleTokenVerifier, IAuthRepository authRepo, JwtAuthTokenUtils jwtAuthTokenUtils)
+        public AuthService(IGoogleTokenVerifier googleTokenVerifier, IAuthRepository authRepo, IJwtAuthTokenUtils jwtAuthTokenUtils)
         {
             _googleTokenVerifier = googleTokenVerifier;
             _authRepo = authRepo;

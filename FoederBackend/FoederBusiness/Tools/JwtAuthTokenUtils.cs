@@ -3,12 +3,13 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using FoederBusiness.Helpers;
+using FoederBusiness.Interfaces;
 using FoederDomain.DomainModels;
 using Microsoft.IdentityModel.Tokens;
 
 namespace FoederBusiness.Services;
 
-public class JwtAuthTokenUtils
+public class JwtAuthTokenUtils : IJwtAuthTokenUtils
 {
     private readonly AuthSettings _authSettings;
 

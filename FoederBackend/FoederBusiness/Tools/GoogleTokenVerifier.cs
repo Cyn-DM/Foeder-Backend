@@ -11,8 +11,8 @@ public class TokenVerificationResult
 
 }
 
-public class GoogleTokenVerifier
-{
+public class GoogleTokenVerifier : IGoogleTokenVerifier
+{   
     private readonly ILogger<GoogleTokenVerifier> _logger;
 
     public GoogleTokenVerifier(ILogger<GoogleTokenVerifier> logger)

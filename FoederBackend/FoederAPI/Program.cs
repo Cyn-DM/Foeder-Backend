@@ -57,10 +57,11 @@ try
 
         });
     builder.Services.AddAuthorization();
-
+    
+    //Dependencies
     builder.Services.AddDbContext<MssqlDbContext>(options => options.UseSqlServer(dbConnectionString));
-    builder.Services.AddScoped<JwtAuthTokenUtils>();
-    builder.Services.AddScoped<GoogleTokenVerifier>();
+    builder.Services.AddScoped<IJwtAuthTokenUtils, JwtAuthTokenUtils>();
+    builder.Services.AddScoped<IGoogleTokenVerifier, GoogleTokenVerifier>();
     builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
     builder.Services.AddScoped<IRecipeService, RecipeService>();
     builder.Services.AddScoped<IAuthService, AuthService>();
