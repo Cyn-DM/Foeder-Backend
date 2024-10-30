@@ -64,7 +64,6 @@ public class AuthServiceTests
             .ReturnsAsync(() => new TokenVerificationResult { IsValid = false });
         
         //Act
-        
         var result = await setup.service.Login("invalid_id_token");
         
         Assert.IsNull(result);

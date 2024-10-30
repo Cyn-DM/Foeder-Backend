@@ -23,11 +23,6 @@ namespace FoederTest
 
         }
 
-        [SetUp]
-        public void Setup()
-        {
-        }
-
         [Test]
         public async Task AssertGetRecipeResponses()
         {
