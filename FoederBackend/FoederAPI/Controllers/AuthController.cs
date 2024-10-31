@@ -63,11 +63,13 @@ namespace FoederAPI.Controllers
 
                 if (!result!.isRefreshTokenFound)
                 {
+                    RemoveRefreshTokenCookie(HttpContext);
                     return StatusCode(500);
                 }
 
                 if (result.IsRefreshTokenExpired)
                 {
+                    RemoveRefreshTokenCookie(HttpContext);
                     return Unauthorized();
                 }
 
@@ -79,6 +81,14 @@ namespace FoederAPI.Controllers
                 return StatusCode(500);
             }
             
+        }
+
+        public void RemoveRefreshTokenCookie(HttpContext httpContext)
+        {
+            if (httpContext.Request.Cookies["refreshToken"] != null)
+            {
+                httpContext.Response.Cookies.Delete("refreshToken");
+            }
         }
         
     }
