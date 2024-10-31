@@ -83,12 +83,26 @@ namespace FoederAPI.Controllers
             
         }
 
-        public void RemoveRefreshTokenCookie(HttpContext httpContext)
+        [HttpGet("logout")]
+        public IActionResult Logout()
+        {
+            if (RemoveRefreshTokenCookie(HttpContext))
+            {
+                return Ok();
+            }
+
+            return NotFound();
+        }
+
+        public bool RemoveRefreshTokenCookie(HttpContext httpContext)
         {
             if (httpContext.Request.Cookies["refreshToken"] != null)
             {
                 httpContext.Response.Cookies.Delete("refreshToken");
+                return true;
             }
+
+            return false;
         }
         
     }
