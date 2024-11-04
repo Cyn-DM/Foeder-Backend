@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using System.Net.Http;
 using System.Web;
+using Microsoft.AspNetCore.Authorization;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
 namespace FoederAPI.Controllers
@@ -13,7 +14,7 @@ namespace FoederAPI.Controllers
     public class AuthController(IAuthService authService) : ControllerBase
     {
         [HttpPost("login")]
-        
+        [AllowAnonymous]
         public async Task<IActionResult> LogIn(Response credentialResponse)
         {
             try

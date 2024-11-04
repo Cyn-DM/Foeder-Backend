@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using FoederBusiness.Helpers;
 using FoederDomain.DomainModels;
+using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
 
 namespace FoederBusiness.Services;
@@ -60,4 +61,13 @@ public class JwtAuthTokenUtils
             return Convert.ToBase64String(randomNumber);
         }
     }
+
+    /*public string GetUserIdFromToken(HttpContext context)
+    {
+        var token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+        var handler = new JwtSecurityTokenHandler();
+        var readToken = handler.ReadJwtToken(token);
+        
+        var userId = readToken.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
+    }*/
 }

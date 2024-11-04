@@ -15,7 +15,7 @@ public class AuthRepository : IAuthRepository
 
     public async Task<User> FindOrCreateUser(User user)
     {
-        User? dbUser = await _context.FindAsync<User>(user.Email);
+        User? dbUser = await _context.Users.FirstOrDefaultAsync(us =>  us.Email == user.Email);
 
         if (dbUser == null)
         {
