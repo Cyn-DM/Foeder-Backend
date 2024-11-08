@@ -95,6 +95,7 @@ namespace FoederAPI.Controllers
             return NotFound();
         }
 
+        [ApiExplorerSettings(IgnoreApi=true)]
         public bool RemoveRefreshTokenCookie(HttpContext httpContext)
         {
             if (httpContext.Request.Cookies["refreshToken"] != null)
