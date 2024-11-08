@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FoederTest
 {
+    [TestFixture]
     public class RecipeServiceTests
     {
         private readonly IRecipeService _recipeService;
@@ -20,11 +21,6 @@ namespace FoederTest
 
             _recipeService = serviceProvider.GetService<IRecipeService>()!;
 
-        }
-
-        [SetUp]
-        public void Setup()
-        {
         }
 
         [Test]
