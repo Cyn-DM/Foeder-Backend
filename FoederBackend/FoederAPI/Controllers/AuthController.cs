@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using System.Net.Http;
 using System.Web;
+using Microsoft.AspNetCore.Authorization;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 
 namespace FoederAPI.Controllers
@@ -13,7 +14,7 @@ namespace FoederAPI.Controllers
     public class AuthController(IAuthService authService) : ControllerBase
     {
         [HttpPost("login")]
-        
+        [AllowAnonymous]
         public async Task<IActionResult> LogIn(Response credentialResponse)
         {
             try
@@ -63,11 +64,13 @@ namespace FoederAPI.Controllers
 
                 if (!result!.isRefreshTokenFound)
                 {
+                    RemoveRefreshTokenCookie(HttpContext);
                     return StatusCode(500);
                 }
 
                 if (result.IsRefreshTokenExpired)
                 {
+                    RemoveRefreshTokenCookie(HttpContext);
                     return Unauthorized();
                 }
 
@@ -79,6 +82,28 @@ namespace FoederAPI.Controllers
                 return StatusCode(500);
             }
             
+        }
+
+        [HttpGet("logout")]
+        public IActionResult Logout()
+        {
+            if (RemoveRefreshTokenCookie(HttpContext))
+            {
+                return Ok();
+            }
+
+            return NotFound();
+        }
+
+        public bool RemoveRefreshTokenCookie(HttpContext httpContext)
+        {
+            if (httpContext.Request.Cookies["refreshToken"] != null)
+            {
+                httpContext.Response.Cookies.Delete("refreshToken");
+                return true;
+            }
+
+            return false;
         }
         
     }
