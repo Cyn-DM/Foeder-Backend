@@ -30,7 +30,8 @@ try
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-    builder.Configuration.AddUserSecrets<Program>();
+    builder.Configuration.AddUserSecrets<Program>(optional : true)
+        .AddEnvironmentVariables();
     var dbConnectionString = builder.Configuration["DbConnectionString"];
     var jwtSecret = builder.Configuration["JwtSettings:SecretKey"];
     var jwtIssuer = builder.Configuration["JwtSettings:Issuer"];
