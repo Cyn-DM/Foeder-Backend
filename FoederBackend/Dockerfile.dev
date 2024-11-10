@@ -55,4 +55,7 @@ USER $APP_UID
 
 ENV ASPNETCORE_URLS=https://+:7058
 
+RUN dotnet dev-certs https
+RUN dotnet dev-certs https --trust
+
 ENTRYPOINT ["dotnet", "FoederAPI.dll"]
