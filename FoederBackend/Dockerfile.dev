@@ -23,7 +23,9 @@ RUN mkdir -p ${CERT_PATH}
 
 
 # Generate HTTPS certificate in the build stage
-RUN dotnet dev-certs https -v -ep ${CERT_PATH}/aspnet.pfx -p zDiojwa398DSA;
+RUN dotnet dev-certs https -v -ep ${CERT_PATH}/aspnetapp.pfx -p "zDiojwa398DSA" && \
+	ls -la ${CERT_PATH}
+
 
 # This is the architecture you’re building for, which is passed in by the builder.
 # Placing it here allows the previous steps to be cached across architectures.
@@ -52,11 +54,20 @@ RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS final
 WORKDIR /app
 
+# Install the ICU package for culture support
+RUN apk add --no-cache icu-libs
+
+# Set the environment variable to disable invariant mode
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+
 ARG CERT_PATH=/tmp/https/aspnet
 
 # Copy everything needed to run the app from the "build" stage.
 COPY --from=build /app .
 COPY --from=build ${CERT_PATH}/aspnetapp.pfx /https/aspnetapp.pfx
+
+# Change permissions to make the certificate accessible to the non-root user
+RUN chown $APP_UID:$APP_UID /https/aspnetapp.pfx && chmod 644 /https/aspnetapp.pfx
 
 # Switch to a non-privileged user (defined in the base image) that the app will run under.
 # See https://docs.docker.com/go/dockerfile-user-best-practices/
@@ -65,6 +76,6 @@ USER $APP_UID
 
 ENV ASPNETCORE_URLS=https://+:7058
 ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
-ENV ASPNETCORE_Kestrel__Certificates__Default__Password=zDiojwa398DSA;
+ENV ASPNETCORE_Kestrel__Certificates__Default__Password="zDiojwa398DSA"
 
 ENTRYPOINT ["dotnet", "FoederAPI.dll"]
