@@ -19,7 +19,7 @@ COPY . /source
 WORKDIR /source/FoederAPI
 
 # Generate HTTPS certificate in the build stage
-RUN dotnet dev-certs https -ep /https/aspnetapp.pfx -p zDiojwa398DSA;
+RUN dotnet dev-certs https -v -ep ./https/aspnetapp.pfx -p zDiojwa398DSA;
 
 # This is the architecture you’re building for, which is passed in by the builder.
 # Placing it here allows the previous steps to be cached across architectures.
