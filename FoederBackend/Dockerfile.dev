@@ -18,6 +18,9 @@ COPY . /source
 
 WORKDIR /source/FoederAPI
 
+# Generate HTTPS certificate in the build stage
+RUN dotnet dev-certs https -ep /https/aspnetapp.pfx -p zDiojwa398DSA;
+
 # This is the architecture you’re building for, which is passed in by the builder.
 # Placing it here allows the previous steps to be cached across architectures.
 ARG TARGETARCH
@@ -47,6 +50,7 @@ WORKDIR /app
 
 # Copy everything needed to run the app from the "build" stage.
 COPY --from=build /app .
+COPY --from=build /https/aspnetapp.pfx /https/aspnetapp.pfx
 
 # Switch to a non-privileged user (defined in the base image) that the app will run under.
 # See https://docs.docker.com/go/dockerfile-user-best-practices/
@@ -54,8 +58,7 @@ COPY --from=build /app .
 USER $APP_UID
 
 ENV ASPNETCORE_URLS=https://+:7058
-
-RUN dotnet dev-certs https
-RUN dotnet dev-certs https --trust
+ENV ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+ENV ASPNETCORE_Kestrel__Certificates__Default__Password=zDiojwa398DSA;
 
 ENTRYPOINT ["dotnet", "FoederAPI.dll"]
