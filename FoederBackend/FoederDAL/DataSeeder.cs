@@ -19,57 +19,47 @@ public class DataSeeder
     {
         if (!_context!.Households.Any())
         {
-            List<User> list = new List<User>();
+            
             _context.Households.AddRange(
                 new Household
                 {
                     Name = "The Johnsons",
-                    Users = list
                 },
                 new Household
                 {
                     Name = "Smith Family",
-                    Users = list
                 },
                 new Household
                 {
                     Name = "Williams Household",
-                    Users = list
                 },
                 new Household
                 {
                     Name = "Brown Family",
-                    Users = list
                 },
                 new Household
                 {
                     Name = "Davis Residence",
-                    Users = list
                 },
                 new Household
                 {
                     Name = "Miller Home",
-                    Users = list
                 },
                 new Household
                 {
                     Name = "Wilson Family",
-                    Users = list
                 },
                 new Household
                 {
                     Name = "Moore Household",
-                    Users = list
                 },
                 new Household
                 {
                     Name = "Taylor Home",
-                    Users = list
                 },
                 new Household
                 {
                     Name = "Anderson Residence",
-                    Users = list
                 }
             );
 
@@ -81,7 +71,6 @@ public class DataSeeder
     {
         if (!_context.Recipes.Any())
         {
-            _context.Households.ToList();
             _context.Recipes.AddRange(
                 new Recipe
                 {
@@ -273,7 +262,6 @@ public class DataSeeder
     {
         if (!_context.Users.Any())
         {
-            _context.Households.ToList();
             _context.Users.AddRange(
                 new User
                 {

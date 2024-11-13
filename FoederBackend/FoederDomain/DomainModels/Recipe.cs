@@ -15,6 +15,8 @@ public class Recipe
     public List<Ingredient> Ingredients { get; set; } = new();
     public List<string> Steps { get; set; } = new();
     [Required]
+    public Guid HouseholdId { get; set; }
+    [Required]
     public Household Household { get; set; }
 
     public Recipe(){}
