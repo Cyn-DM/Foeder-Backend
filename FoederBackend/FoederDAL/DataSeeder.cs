@@ -15,7 +15,7 @@ public class DataSeeder
         }
     }
 
-    public void Seed()
+    public void SeedHouseholds()
     {
         if (!_context!.Households.Any())
         {
@@ -75,88 +75,13 @@ public class DataSeeder
 
             _context.SaveChanges();
         }
+    }
 
-        if (!_context.Users.Any())
-        {
-            _context.Users.AddRange(
-                new User
-                {
-                    FirstName = "John",
-                    LastName = "Doe",
-                    Email = "john.doe@example.com",
-                    Household = _context.Households.FirstOrDefault(h => h.Name == "The Johnsons")
-                },
-                new User
-                {
-                    FirstName = "Jane",
-                    LastName = "Doe",
-                    Email = "jane.doe@example.com",
-                    Household = _context.Households.FirstOrDefault(h => h.Name == "Smith Family")
-                },
-                new User
-                {
-                    FirstName = "Bob",
-                    LastName = "Smith",
-                    Email = "bob.smith@example.com",
-                    Household = _context.Households.FirstOrDefault(h => h.Name == "Williams Household")
-                },
-                new User
-                {
-                    FirstName = "Alice",
-                    LastName = "Johnson",
-                    Email = "alice.johnson@example.com",
-                    Household = _context.Households.FirstOrDefault(h => h.Name == "Brown Family")
-                },
-                new User
-                {
-                    FirstName = "Charlie",
-                    LastName = "Brown",
-                    Email = "charlie.brown@example.com",
-                    Household = _context.Households.FirstOrDefault(h => h.Name == "Davis Residence")
-                },
-                new User
-                {
-                    FirstName = "Emily",
-                    LastName = "Davis",
-                    Email = "emily.davis@example.com",
-                    Household = _context.Households.FirstOrDefault(h => h.Name == "Miller Home")
-                },
-                new User
-                {
-                    FirstName = "Michael",
-                    LastName = "Miller",
-                    Email = "michael.miller@example.com",
-                    Household = _context.Households.FirstOrDefault(h => h.Name == "Wilson Family")
-                },
-                new User
-                {
-                    FirstName = "Sarah",
-                    LastName = "Wilson",
-                    Email = "sarah.wilson@example.com",
-                    Household = _context.Households.FirstOrDefault(h => h.Name == "Moore Household")
-                },
-                new User
-                {
-                    FirstName = "David",
-                    LastName = "Moore",
-                    Email = "david.moore@example.com",
-                    Household = _context.Households.FirstOrDefault(h => h.Name == "Taylor Home")
-                },
-                new User
-                {
-                    FirstName = "Sophia",
-                    LastName = "Taylor",
-                    Email = "sophia.taylor@example.com",
-                    Household = _context.Households.FirstOrDefault(h => h.Name == "Anderson Residence")
-                }
-            );
-
-            _context.SaveChanges();
-        }
-
-
+    public void SeedRecipes()
+    {
         if (!_context.Recipes.Any())
         {
+            _context.Households.ToList();
             _context.Recipes.AddRange(
                 new Recipe
                 {
@@ -336,6 +261,88 @@ public class DataSeeder
                         "Add beans and spices",
                         "Simmer for 30 minutes"
                     },
+                    Household = _context.Households.FirstOrDefault(h => h.Name == "Anderson Residence")
+                }
+            );
+
+            _context.SaveChanges();
+        }
+    }
+
+    public void SeedUsers()
+    {
+        if (!_context.Users.Any())
+        {
+            _context.Households.ToList();
+            _context.Users.AddRange(
+                new User
+                {
+                    FirstName = "John",
+                    LastName = "Doe",
+                    Email = "john.doe@example.com",
+                    Household = _context.Households.FirstOrDefault(h => h.Name == "The Johnsons")
+                },
+                new User
+                {
+                    FirstName = "Jane",
+                    LastName = "Doe",
+                    Email = "jane.doe@example.com",
+                    Household = _context.Households.FirstOrDefault(h => h.Name == "Smith Family")
+                },
+                new User
+                {
+                    FirstName = "Bob",
+                    LastName = "Smith",
+                    Email = "bob.smith@example.com",
+                    Household = _context.Households.FirstOrDefault(h => h.Name == "Williams Household")
+                },
+                new User
+                {
+                    FirstName = "Alice",
+                    LastName = "Johnson",
+                    Email = "alice.johnson@example.com",
+                    Household = _context.Households.FirstOrDefault(h => h.Name == "Brown Family")
+                },
+                new User
+                {
+                    FirstName = "Charlie",
+                    LastName = "Brown",
+                    Email = "charlie.brown@example.com",
+                    Household = _context.Households.FirstOrDefault(h => h.Name == "Davis Residence")
+                },
+                new User
+                {
+                    FirstName = "Emily",
+                    LastName = "Davis",
+                    Email = "emily.davis@example.com",
+                    Household = _context.Households.FirstOrDefault(h => h.Name == "Miller Home")
+                },
+                new User
+                {
+                    FirstName = "Michael",
+                    LastName = "Miller",
+                    Email = "michael.miller@example.com",
+                    Household = _context.Households.FirstOrDefault(h => h.Name == "Wilson Family")
+                },
+                new User
+                {
+                    FirstName = "Sarah",
+                    LastName = "Wilson",
+                    Email = "sarah.wilson@example.com",
+                    Household = _context.Households.FirstOrDefault(h => h.Name == "Moore Household")
+                },
+                new User
+                {
+                    FirstName = "David",
+                    LastName = "Moore",
+                    Email = "david.moore@example.com",
+                    Household = _context.Households.FirstOrDefault(h => h.Name == "Taylor Home")
+                },
+                new User
+                {
+                    FirstName = "Sophia",
+                    LastName = "Taylor",
+                    Email = "sophia.taylor@example.com",
                     Household = _context.Households.FirstOrDefault(h => h.Name == "Anderson Residence")
                 }
             );

@@ -109,7 +109,9 @@ try
 
             // Seed the data
             var seeder = new DataSeeder(context);
-            seeder.Seed();
+            seeder.SeedHouseholds();
+            seeder.SeedUsers();
+            seeder.SeedRecipes();
         }
         catch (Exception ex)
         {
