@@ -1,0 +1,17 @@
+name: Trigger Full Repo Workflow
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  trigger-full-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send repository_dispatch event
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.PAT }}
+          repository: Cyn-DM/Foeder
+          event-type: update-submodules
