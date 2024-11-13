@@ -16,6 +16,7 @@ public class User
     public string FullName => FirstName + " " + LastName;
     [EmailAddress, MinLength(3), MaxLength(320)]
     public string Email { get; set; } = string.Empty; 
+    public Guid HouseholdId { get; set; }
     public Household? Household { get; set; }
 
     public User(){}
