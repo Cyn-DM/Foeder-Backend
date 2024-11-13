@@ -14,4 +14,4 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           repository: Cyn-DM/Foeder
-          event-type: update-submodules
+          event-type: update-submodules-dev
