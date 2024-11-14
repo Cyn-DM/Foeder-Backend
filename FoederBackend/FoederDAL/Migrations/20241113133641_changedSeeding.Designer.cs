@@ -4,6 +4,7 @@ using FoederDAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoederDAL.Migrations
 {
     [DbContext(typeof(MssqlDbContext))]
-    partial class MssqlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241113133641_changedSeeding")]
+    partial class changedSeeding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,8 +92,6 @@ namespace FoederDAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("HouseholdId");
-
                     b.ToTable("Recipes");
                 });
 
@@ -149,17 +150,6 @@ namespace FoederDAL.Migrations
                         .HasForeignKey("RecipeId");
                 });
 
-            modelBuilder.Entity("FoederDomain.DomainModels.Recipe", b =>
-                {
-                    b.HasOne("FoederDomain.DomainModels.Household", "Household")
-                        .WithMany("Recipes")
-                        .HasForeignKey("HouseholdId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Household");
-                });
-
             modelBuilder.Entity("FoederDomain.DomainModels.RefreshToken", b =>
                 {
                     b.HasOne("FoederDomain.DomainModels.User", "User")
@@ -173,17 +163,13 @@ namespace FoederDAL.Migrations
 
             modelBuilder.Entity("FoederDomain.DomainModels.User", b =>
                 {
-                    b.HasOne("FoederDomain.DomainModels.Household", "Household")
+                    b.HasOne("FoederDomain.DomainModels.Household", null)
                         .WithMany("Users")
                         .HasForeignKey("HouseholdId");
-
-                    b.Navigation("Household");
                 });
 
             modelBuilder.Entity("FoederDomain.DomainModels.Household", b =>
                 {
-                    b.Navigation("Recipes");
-
                     b.Navigation("Users");
                 });
 

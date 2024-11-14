@@ -7,6 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Google.Apis.Auth" Version="1.68.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
+      <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\FoederDAL\FoederDAL.csproj" />
       <ProjectReference Include="..\FoederDomain\FoederDomain.csproj" />
     </ItemGroup>

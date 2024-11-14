@@ -1,6 +1,6 @@
-﻿using System.Runtime.CompilerServices;
-using FoederBusiness.Dtos;
+﻿using FoederBusiness.Dtos;
 using FoederBusiness.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoederAPI.Controllers;
@@ -16,8 +16,9 @@ public class RecipeController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<List<GetRecipesResponse>> GetRecipes()
+    [Authorize]
+    public async Task<ActionResult<List<GetRecipesResponse>>> GetRecipes()
     {
-        return _recipeService.GetRecipes();
+        return await _recipeService.GetRecipes();
     }
 }

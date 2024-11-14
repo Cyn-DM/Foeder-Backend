@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FoederDomain.DomainModels;
+﻿using FoederDomain.DomainModels;
 using FoederDomain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,16 +6,16 @@ namespace FoederDAL.Repository
 {
     public class RecipeRepository : IRecipeRepository
     {
-        private readonly MssqlDbContext _context;
+        private readonly MssqlDbContext? _context;
 
-        public RecipeRepository(DbContext context)
+        public RecipeRepository(MssqlDbContext context)
         {
-            this._context = context as MssqlDbContext;
+                this._context = context;
         }
 
-        public List<Recipe> GetRecipes()
+        public async Task<List<Recipe>> GetRecipes()
         {
-            return _context.Recipes.ToList();
+            return await _context!.Recipes.ToListAsync();
         }
     }
 }

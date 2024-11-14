@@ -4,5 +4,5 @@ namespace FoederDomain.Interfaces;
 
 public interface IRecipeRepository
 {
-    List<Recipe> GetRecipes();
+    Task<List<Recipe>> GetRecipes();
 }

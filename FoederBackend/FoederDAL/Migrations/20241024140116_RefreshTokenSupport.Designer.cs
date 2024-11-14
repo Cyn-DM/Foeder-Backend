@@ -4,6 +4,7 @@ using FoederDAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoederDAL.Migrations
 {
     [DbContext(typeof(MssqlDbContext))]
-    partial class MssqlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241024140116_RefreshTokenSupport")]
+    partial class RefreshTokenSupport
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,24 +105,20 @@ namespace FoederDAL.Migrations
                     b.Property<DateTime>("ExpirationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(320)");
 
                     b.HasKey("Token");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserEmail");
 
                     b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("FoederDomain.DomainModels.User", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(320)
                         .HasColumnType("nvarchar(320)");
 
@@ -132,10 +131,11 @@ namespace FoederDAL.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasMaxLength(60)
                         .HasColumnType("nvarchar(60)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Email");
 
                     b.HasIndex("HouseholdId");
 
@@ -152,7 +152,7 @@ namespace FoederDAL.Migrations
             modelBuilder.Entity("FoederDomain.DomainModels.Recipe", b =>
                 {
                     b.HasOne("FoederDomain.DomainModels.Household", "Household")
-                        .WithMany("Recipes")
+                        .WithMany()
                         .HasForeignKey("HouseholdId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -164,7 +164,7 @@ namespace FoederDAL.Migrations
                 {
                     b.HasOne("FoederDomain.DomainModels.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserEmail")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -182,8 +182,6 @@ namespace FoederDAL.Migrations
 
             modelBuilder.Entity("FoederDomain.DomainModels.Household", b =>
                 {
-                    b.Navigation("Recipes");
-
                     b.Navigation("Users");
                 });
 
