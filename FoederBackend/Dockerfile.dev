@@ -21,6 +21,9 @@ WORKDIR /source/FoederAPI
 ARG CERT_PATH=/tmp/https/aspnet
 RUN mkdir -p ${CERT_PATH}
 
+LABEL org.opencontainers.image.source=https://github.com/Cyn-DM/Foeder-Backend
+LABEL org.opencontainers.image.description="Foeder backend"
+
 
 # Generate HTTPS certificate in the build stage
 RUN dotnet dev-certs https -v -ep ${CERT_PATH}/aspnetapp.pfx -p "zDiojwa398DSA" && \
