@@ -14,4 +14,4 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           repository: Cyn-DM/Foeder
-          event-type: push-to-dockerhub
+          event-type: update-submodules-main
