@@ -1,4 +1,4 @@
-name: Trigger Full Repo Workflow Dev
+name: Trigger Full Repo Workflow Main
 
 on:
   push:
