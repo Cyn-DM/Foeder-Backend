@@ -64,11 +64,13 @@ namespace FoederAPI.Controllers
 
                 if (!result!.isRefreshTokenFound)
                 {
+                    RemoveRefreshTokenCookie(HttpContext);
                     return StatusCode(500);
                 }
 
                 if (result.IsRefreshTokenExpired)
                 {
+                    RemoveRefreshTokenCookie(HttpContext);
                     return Unauthorized();
                 }
 
@@ -81,13 +83,36 @@ namespace FoederAPI.Controllers
             }
             
         }
+
+        [HttpGet("logout")]
+        public IActionResult Logout()
+        {
+            if (RemoveRefreshTokenCookie(HttpContext))
+            {
+                return Ok();
+            }
+
+            return NotFound();
+        }
+
+        [ApiExplorerSettings(IgnoreApi=true)]
+        public bool RemoveRefreshTokenCookie(HttpContext httpContext)
+        {
+            if (httpContext.Request.Cookies["refreshToken"] != null)
+            {
+                httpContext.Response.Cookies.Delete("refreshToken");
+                return true;
+            }
+
+            return false;
+        }
         
     }
-
+    public class Response
+    {
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
+        public required string CredentialResponse { get; set; }
+    }
 }
 
-public class Response
-{
-    // ReSharper disable once UnusedAutoPropertyAccessor.Global
-    public required string CredentialResponse { get; set; }
-}
+

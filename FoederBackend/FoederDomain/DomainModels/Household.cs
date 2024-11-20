@@ -10,7 +10,8 @@ public class Household
     [Required, MinLength(1), MaxLength(50)]
     public string Name { get; set; } = string.Empty;
     [Required]
-    public List<User> Users { get; set; }
+    public List<User> Users { get; set; } = new List<User>();
+    public List<Recipe> Recipes { get; set; }
 
     public Household(){}
 }

@@ -30,7 +30,8 @@ try
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-    builder.Configuration.AddUserSecrets<Program>();
+    builder.Configuration.AddUserSecrets<Program>(optional : true)
+        .AddEnvironmentVariables();
     var dbConnectionString = builder.Configuration["DbConnectionString"];
     var jwtSecret = builder.Configuration["JwtSettings:SecretKey"];
     var jwtIssuer = builder.Configuration["JwtSettings:Issuer"];
@@ -57,10 +58,11 @@ try
 
         });
     builder.Services.AddAuthorization();
-
+    
+    //Dependencies
     builder.Services.AddDbContext<MssqlDbContext>(options => options.UseSqlServer(dbConnectionString));
-    builder.Services.AddScoped<JwtAuthTokenUtils>();
-    builder.Services.AddScoped<GoogleTokenVerifier>();
+    builder.Services.AddScoped<IJwtAuthTokenUtils, JwtAuthTokenUtils>();
+    builder.Services.AddScoped<IGoogleTokenVerifier, GoogleTokenVerifier>();
     builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
     builder.Services.AddScoped<IRecipeService, RecipeService>();
     builder.Services.AddScoped<IAuthService, AuthService>();
@@ -107,7 +109,9 @@ try
 
             // Seed the data
             var seeder = new DataSeeder(context);
-            seeder.Seed();
+            seeder.SeedHouseholds();
+            seeder.SeedUsers();
+            seeder.SeedRecipes();
         }
         catch (Exception ex)
         {

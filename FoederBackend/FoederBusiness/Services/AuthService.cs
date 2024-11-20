@@ -8,20 +8,20 @@ namespace FoederBusiness.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly GoogleTokenVerifier _googleTokenVerifier;
+        private readonly IGoogleTokenVerifier _googleTokenVerifier;
         private readonly IAuthRepository _authRepo;
-        private readonly JwtAuthTokenUtils _jwtAuthTokenUtils;
+        private readonly IJwtAuthTokenUtils _jwtAuthTokenUtils;
 
-        public AuthService(GoogleTokenVerifier googleTokenVerifier, IAuthRepository authRepo, JwtAuthTokenUtils jwtAuthTokenUtils)
+        public AuthService(IGoogleTokenVerifier googleTokenVerifier, IAuthRepository authRepo, IJwtAuthTokenUtils jwtAuthTokenUtils)
         {
             _googleTokenVerifier = googleTokenVerifier;
             _authRepo = authRepo;
             _jwtAuthTokenUtils = jwtAuthTokenUtils;
         }
 
-        public async Task<LoginTokenResult?> Login(string idToken)
+        public async Task<LoginTokenResult?> Login(string authToken)
         {
-            var tokenResult = await _googleTokenVerifier.VerifyIdToken(idToken);
+            var tokenResult = await _googleTokenVerifier.VerifyIdToken(authToken);
 
             if (tokenResult.IsValid == false)
             {
@@ -35,7 +35,7 @@ namespace FoederBusiness.Services
                 LastName = tokenResult.payload.FamilyName,
             };
 
-            User foederUser = await _authRepo.FindOrCreateUser(verifiedGoogleUser);
+            User foederUser = await _authRepo.FindOrCreateUser(verifiedGoogleUser); 
             string accessToken = _jwtAuthTokenUtils.GenerateAccessToken(foederUser);
             string refreshToken = _jwtAuthTokenUtils.GenerateRefreshToken();
             

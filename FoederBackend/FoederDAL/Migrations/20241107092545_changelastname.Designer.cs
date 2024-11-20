@@ -4,6 +4,7 @@ using FoederDAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoederDAL.Migrations
 {
     [DbContext(typeof(MssqlDbContext))]
-    partial class MssqlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241107092545_changelastname")]
+    partial class changelastname
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -152,7 +155,7 @@ namespace FoederDAL.Migrations
             modelBuilder.Entity("FoederDomain.DomainModels.Recipe", b =>
                 {
                     b.HasOne("FoederDomain.DomainModels.Household", "Household")
-                        .WithMany("Recipes")
+                        .WithMany()
                         .HasForeignKey("HouseholdId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -182,8 +185,6 @@ namespace FoederDAL.Migrations
 
             modelBuilder.Entity("FoederDomain.DomainModels.Household", b =>
                 {
-                    b.Navigation("Recipes");
-
                     b.Navigation("Users");
                 });
 
