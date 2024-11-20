@@ -11,7 +11,7 @@ public class Household
     public string Name { get; set; } = string.Empty;
     [Required]
     public List<User> Users { get; set; } = new List<User>();
-    public List<Recipe> Recipes { get; set; }
 
-    public Household(){}
+    public List<Recipe> Recipes { get; set; } = new List<Recipe>();
+    
 }
