@@ -19,9 +19,9 @@ namespace FoederBusiness.Services
             _jwtAuthTokenUtils = jwtAuthTokenUtils;
         }
 
-        public async Task<LoginTokenResult?> Login(string idToken)
+        public async Task<LoginTokenResult?> Login(string authToken)
         {
-            var tokenResult = await _googleTokenVerifier.VerifyIdToken(idToken);
+            var tokenResult = await _googleTokenVerifier.VerifyIdToken(authToken);
 
             if (tokenResult.IsValid == false)
             {

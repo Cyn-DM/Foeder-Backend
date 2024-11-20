@@ -108,11 +108,11 @@ namespace FoederAPI.Controllers
         }
         
     }
-
+    public class Response
+    {
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
+        public required string CredentialResponse { get; set; }
+    }
 }
 
-public class Response
-{
-    // ReSharper disable once UnusedAutoPropertyAccessor.Global
-    public required string CredentialResponse { get; set; }
-}
+
