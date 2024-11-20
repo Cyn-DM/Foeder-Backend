@@ -17,22 +17,22 @@ public class HouseholdController : ControllerBase
         _householdService = householdService;
     }
     
-    [HttpPost("addHousehold")]
-    public async Task<IActionResult> AddHousehold([FromBody] Household household)
+    [HttpPost("AddHousehold")]
+    public async Task<IActionResult> AddHousehold(Household household)
     {
         var results = new List<ValidationResult>();
         Validator.TryValidateObject(household, new ValidationContext(household), results);
-
-        if (!results.Any())
+    
+        if (results.Any())
         {
-            return BadRequest(results);
+            return BadRequest(results.Select(m => m.ErrorMessage).ToList());
         }
         
         var validationResult = await _householdService.AddHousehold(household);
     
-        if (validationResult.ValidationResults.Count == 0)
+        if (validationResult.ValidationResults.Count != 0)
         {
-            return BadRequest(validationResult.ValidationResults);
+            return BadRequest(validationResult.ValidationResults.Select(m => m.ErrorMessage).ToList());
         }
 
         if (!validationResult.hasOperationSucceeded)
