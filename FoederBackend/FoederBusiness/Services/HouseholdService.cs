@@ -11,25 +11,34 @@ namespace FoederBusiness.Services;
 public class HouseholdService : IHouseholdService
 {
     private readonly IHouseholdRepository _householdRepository;
+    private readonly IAuthRepository _authRepository;
 
-    public HouseholdService(IHouseholdRepository householdRepository)
+    public HouseholdService(IHouseholdRepository householdRepository, IAuthRepository authRepository)
     {
         _householdRepository = householdRepository;
+        _authRepository = authRepository;
     }
-    public async Task<ValidationDTO> AddHousehold(Household household)
+    public async Task<ValidationDTO> AddHousehold(Household household, string bearerToken)
     {
         var dto = ValidationUtils.ValidateObject(household);
-
-        try
-        {
-            await _householdRepository.AddHousehold(household);
-            dto.hasOperationSucceeded = true;
+        var email = JwtAuthTokenUtils.GetUserEmailFromToken(bearerToken);
+        
+        if (email != null){
+            try
+            {
+                var user = await _authRepository.FindUserByEmail(email);
+                if (user != null)
+                {
+                    await _householdRepository.AddHousehold(household, user);
+                    dto.hasOperationSucceeded = true;
+                }
+            }
+            catch (SqlException e)
+            {
+                dto.hasOperationSucceeded = false;
+            }
         }
-        catch (SqlException e)
-        {
-            dto.hasOperationSucceeded = false;
-        }
-
+       
         return dto;
 
     }

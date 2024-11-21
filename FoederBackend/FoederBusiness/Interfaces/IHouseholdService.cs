@@ -5,5 +5,5 @@ namespace FoederBusiness.Interfaces;
 
 public interface IHouseholdService
 {
-    Task<ValidationDTO> AddHousehold(Household household);
+    Task<ValidationDTO> AddHousehold(Household household, string bearerToken);
 }

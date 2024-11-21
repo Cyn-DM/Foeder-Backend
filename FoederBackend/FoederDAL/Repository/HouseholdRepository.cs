@@ -11,9 +11,13 @@ public class HouseholdRepository : IHouseholdRepository
     {
         this._context = context;
     }
-    public async Task AddHousehold(Household household)
+
+    public async Task AddHousehold(Household household, User user)
     {
         _context.Households.Add(household);
+        user.HouseholdId = household.Id;
+        user.Household = household;
+        _context.Users.Update(user);
         
         await _context.SaveChangesAsync();
     }

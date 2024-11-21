@@ -63,12 +63,13 @@ public class JwtAuthTokenUtils : IJwtAuthTokenUtils
         }
     }
 
-    /*public string GetUserIdFromToken(HttpContext context)
+    public static string? GetUserEmailFromToken(string bearerToken)
     {
-        var token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+        var token = bearerToken.Replace("Bearer ", "");
         var handler = new JwtSecurityTokenHandler();
         var readToken = handler.ReadJwtToken(token);
         
-        var userId = readToken.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
-    }*/
+        return readToken.Claims.FirstOrDefault(c => c.Type == "Email")?.Value;
+        
+    }
 }

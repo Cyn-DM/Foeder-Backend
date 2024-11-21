@@ -27,8 +27,9 @@ public class HouseholdController : ControllerBase
         {
             return BadRequest(results.Select(m => m.ErrorMessage).ToList());
         }
-        
-        var validationResult = await _householdService.AddHousehold(household);
+
+        var bearerToken = HttpContext.Request.Headers["Authorization"].ToString();
+        var validationResult = await _householdService.AddHousehold(household, bearerToken);
     
         if (validationResult.ValidationResults.Count != 0)
         {
