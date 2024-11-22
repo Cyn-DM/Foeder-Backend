@@ -29,7 +29,6 @@ namespace FoederAPI.Controllers
                 var cookieOptions = new CookieOptions()
                 {
                     Expires = DateTimeOffset.Now.AddDays(7),
-                    Domain = "localhost",
                     HttpOnly = true,
                     Secure = true,
                     SameSite = SameSiteMode.Lax,
