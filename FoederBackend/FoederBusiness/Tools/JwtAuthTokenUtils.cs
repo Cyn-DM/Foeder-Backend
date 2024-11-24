@@ -49,6 +49,8 @@ public class JwtAuthTokenUtils : IJwtAuthTokenUtils
             claims.AddClaim(new Claim("HouseholdId", user.Household.Id.ToString()));
         }
 
+        claims.AddClaim(new Claim("Id", user.Id.ToString()));
+
         return claims;
 
     }

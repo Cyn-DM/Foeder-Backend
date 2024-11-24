@@ -45,4 +45,17 @@ public class HouseholdController : ControllerBase
 
 
     }
+
+    [HttpGet("Household")]
+    public async Task<IActionResult> GetHouseholdByUserId(Guid userId)
+    {
+        var household = await _householdService.GetHouseholdByUserId(userId);
+
+        if (household == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(household);
+    }
 }

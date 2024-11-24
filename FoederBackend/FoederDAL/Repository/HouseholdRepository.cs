@@ -1,5 +1,6 @@
 using FoederDomain.DomainModels;
 using FoederDomain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace FoederDAL.Repository;
 
@@ -20,5 +21,14 @@ public class HouseholdRepository : IHouseholdRepository
         _context.Users.Update(user);
         
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<Household?> GetHouseholdByUserId(Guid userId)
+    {
+        var household = await _context.Households
+            .Include(h => h.Users)
+            .FirstOrDefaultAsync(h => h.Users.Any(u => u.Id == userId));
+
+        return household;
     }
 }

@@ -4,5 +4,6 @@ namespace FoederDomain.Interfaces;
 
 public interface IHouseholdRepository
 {
-    public Task AddHousehold(Household household, User user);
+    Task AddHousehold(Household household, User user);
+    Task<Household?> GetHouseholdByUserId(Guid userId);
 }

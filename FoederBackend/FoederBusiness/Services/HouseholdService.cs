@@ -42,4 +42,16 @@ public class HouseholdService : IHouseholdService
         return dto;
 
     }
+
+    public async Task<Household?> GetHouseholdByUserId(Guid userId)
+    {
+        var household = await _householdRepository.GetHouseholdByUserId(userId);
+
+        if (household == null)
+        {
+            return null;
+        }
+        
+        return household;
+    }
 }
