@@ -46,7 +46,7 @@ public class HouseholdController : ControllerBase
 
     }
 
-    [HttpGet("Household")]
+    [HttpGet("GetHouseholdByUser")]
     public async Task<IActionResult> GetHouseholdByUserId(Guid userId)
     {
         var household = await _householdService.GetHouseholdByUserId(userId);

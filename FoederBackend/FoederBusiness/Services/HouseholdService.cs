@@ -27,8 +27,16 @@ public class HouseholdService : IHouseholdService
             try
             {
                 var user = await _authRepository.FindUserByEmail(email);
+                
                 if (user != null)
                 {
+                    if (user.Household != null)
+                    {
+                        dto.ValidationResults.Add(new ValidationResult("Household already added."));
+                        dto.hasOperationSucceeded = false;
+                        return dto;
+                    } 
+                    
                     await _householdRepository.AddHousehold(household, user);
                     dto.hasOperationSucceeded = true;
                 }
@@ -46,11 +54,6 @@ public class HouseholdService : IHouseholdService
     public async Task<Household?> GetHouseholdByUserId(Guid userId)
     {
         var household = await _householdRepository.GetHouseholdByUserId(userId);
-
-        if (household == null)
-        {
-            return null;
-        }
         
         return household;
     }

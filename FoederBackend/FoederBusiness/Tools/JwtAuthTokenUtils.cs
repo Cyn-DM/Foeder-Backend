@@ -71,7 +71,7 @@ public class JwtAuthTokenUtils : IJwtAuthTokenUtils
         var handler = new JwtSecurityTokenHandler();
         var readToken = handler.ReadJwtToken(token);
         
-        return readToken.Claims.FirstOrDefault(c => c.Type == "Email")?.Value;
+        return readToken.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
         
     }
 }

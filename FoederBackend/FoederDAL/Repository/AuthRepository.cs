@@ -29,7 +29,9 @@ public class AuthRepository : IAuthRepository
 
     public async Task<User?> FindUserByEmail(string email)
     {
-        return  await _context.Users.FirstOrDefaultAsync(us => us.Email == email);
+        return  await _context.Users
+            .Include(u => u.Household)
+            .FirstOrDefaultAsync(us => us.Email == email);
     }
     
     

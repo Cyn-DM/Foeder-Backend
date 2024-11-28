@@ -91,7 +91,7 @@ namespace FoederAPI.Controllers
                 return Ok();
             }
 
-            return NotFound();
+            return BadRequest();
         }
 
         [ApiExplorerSettings(IgnoreApi=true)]

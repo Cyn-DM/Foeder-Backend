@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
 
 namespace FoederDomain.DomainModels;
 
@@ -17,6 +18,7 @@ public class User
     [EmailAddress, MinLength(3), MaxLength(320)]
     public string Email { get; set; } = string.Empty; 
     public Guid? HouseholdId { get; set; }
+    [JsonIgnore]
     public Household? Household { get; set; }
 
     public User(){}
