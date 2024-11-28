@@ -67,6 +67,8 @@ try
     builder.Services.AddScoped<IRecipeService, RecipeService>();
     builder.Services.AddScoped<IAuthService, AuthService>();
     builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+    builder.Services.AddScoped<IHouseholdRepository, HouseholdRepository>();
+    builder.Services.AddScoped<IHouseholdService, HouseholdService>();
     builder.Services.AddSingleton<AuthSettings>(sp => new AuthSettings(jwtSecret ?? throw new Exception("Add jwtSecret."),
         jwtIssuer ?? throw new Exception("Add issuer."),
         jwtAudience ?? throw new Exception("Add audience."),

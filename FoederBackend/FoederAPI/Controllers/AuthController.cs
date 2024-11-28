@@ -29,7 +29,6 @@ namespace FoederAPI.Controllers
                 var cookieOptions = new CookieOptions()
                 {
                     Expires = DateTimeOffset.Now.AddDays(7),
-                    Domain = "localhost",
                     HttpOnly = true,
                     Secure = true,
                     SameSite = SameSiteMode.Lax,
@@ -44,7 +43,7 @@ namespace FoederAPI.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -92,7 +91,7 @@ namespace FoederAPI.Controllers
                 return Ok();
             }
 
-            return NotFound();
+            return BadRequest();
         }
 
         [ApiExplorerSettings(IgnoreApi=true)]

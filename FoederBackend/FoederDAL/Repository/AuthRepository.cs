@@ -27,6 +27,15 @@ public class AuthRepository : IAuthRepository
         return dbUser;
     }
 
+    public async Task<User?> FindUserByEmail(string email)
+    {
+        return  await _context.Users
+            .Include(u => u.Household)
+            .FirstOrDefaultAsync(us => us.Email == email);
+    }
+    
+    
+
     public async Task<RefreshToken?> GetStoredRefreshToken(string refreshToken)
     {
         return await _context.RefreshTokens.Include(rt => rt.User).FirstOrDefaultAsync(rt => rt.Token == refreshToken);
