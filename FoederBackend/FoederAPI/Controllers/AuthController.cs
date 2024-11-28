@@ -43,7 +43,7 @@ namespace FoederAPI.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
 
