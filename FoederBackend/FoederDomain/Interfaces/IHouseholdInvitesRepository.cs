@@ -6,5 +6,5 @@ public interface IHouseholdInvitesRepository
 {
     Task<List<HouseholdInvite>> GetHouseholdInvites(Guid userId);
     Task InviteToHousehold(HouseholdInvite householdInvite);
-    Task RespondToHouseholdInvite(Guid householdInviteId, bool isAccepted);
+    Task UpdateHouseholdInvite(HouseholdInvite householdInvite);
 }

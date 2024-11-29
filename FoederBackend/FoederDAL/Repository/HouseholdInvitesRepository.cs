@@ -29,8 +29,17 @@ public class HouseholdInvitesRepository : IHouseholdInvitesRepository
         await _context.SaveChangesAsync();
     }
 
-    public Task RespondToHouseholdInvite(Guid householdInviteId, bool isAccepted)
+    public async Task UpdateHouseholdInvite(HouseholdInvite householdInvite)
     {
-        throw new NotImplementedException();
+        _context.HouseholdInvites.Update(householdInvite);
+        
+        if (householdInvite.IsAccepted == true)
+        {
+            var user = householdInvite.InvitedUser;
+            user.Household = householdInvite.Household;
+            _context.Users.Update(householdInvite.InvitedUser);
+        }
+        
+        await _context.SaveChangesAsync();
     }
 }
