@@ -12,14 +12,13 @@ public class HouseholdInvitesRepository : IHouseholdInvitesRepository
     {
         this._context = context;
     }
-    
+
     public async Task<List<HouseholdInvite>> GetHouseholdInvites(Guid userId)
     {
-
         List<HouseholdInvite> foundInvites = await _context.HouseholdInvites
             .Where(x => x.InvitedUser.Id == userId)
             .ToListAsync();
-        
+
         return foundInvites;
     }
 
@@ -31,15 +30,20 @@ public class HouseholdInvitesRepository : IHouseholdInvitesRepository
 
     public async Task UpdateHouseholdInvite(HouseholdInvite householdInvite)
     {
-        _context.HouseholdInvites.Update(householdInvite);
-        
-        if (householdInvite.IsAccepted == true)
+        if (!householdInvite.IsAccepted.HasValue)
         {
-            var user = householdInvite.InvitedUser;
-            user.Household = householdInvite.Household;
-            _context.Users.Update(householdInvite.InvitedUser);
+            throw new ArgumentNullException("Household invite has no acceptation value.");
         }
-        
+        if (householdInvite.IsAccepted.HasValue)
+        {
+            if (householdInvite.IsAccepted.Value)
+            {
+                var user = householdInvite.InvitedUser;
+                user.Household = householdInvite.Household;
+                _context.Users.Update(householdInvite.InvitedUser);
+            }  
+            _context.HouseholdInvites.Update(householdInvite);
+        }
         await _context.SaveChangesAsync();
     }
 }

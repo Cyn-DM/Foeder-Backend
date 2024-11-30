@@ -33,7 +33,11 @@ public class AuthRepository : IAuthRepository
             .Include(u => u.Household)
             .FirstOrDefaultAsync(us => us.Email == email);
     }
-    
+
+    public async Task<User?> FindUserById(Guid userId)
+    {
+        return await _context.Users.FindAsync(userId);
+    }
     
 
     public async Task<RefreshToken?> GetStoredRefreshToken(string refreshToken)

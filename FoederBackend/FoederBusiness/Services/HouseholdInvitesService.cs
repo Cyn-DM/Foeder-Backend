@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using FoederBusiness.Helpers;
 using FoederBusiness.Interfaces;
+using FoederDomain.CustomExceptions;
 using FoederDomain.DomainModels;
 using FoederDomain.Interfaces;
 using Microsoft.Data.SqlClient;
@@ -19,6 +20,10 @@ public class HouseholdInvitesService : IHouseholdInvitesService
     }
     public async Task<List<HouseholdInvite>> GetHouseholdInvites(Guid userId)
     {
+        if (await _authRepository.FindUserById(userId) == null)
+        {
+            throw new UserNotFoundException();
+        }
         return await _householdInvitesRepository.GetHouseholdInvites(userId);
     }
 
@@ -31,10 +36,7 @@ public class HouseholdInvitesService : IHouseholdInvitesService
             var user = await _authRepository.FindUserByEmail(householdInvite.InvitedUser.Email);
             if (user is null)
             {
-                validation.hasOperationSucceeded = false;
-                validation.ValidationResults
-                    .Add(new ValidationResult("Invited user does not exist."));
-                return validation;
+                throw new UserNotFoundException();
             }
 
             await _householdInvitesRepository.InviteToHousehold(householdInvite);
