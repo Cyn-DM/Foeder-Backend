@@ -2,6 +2,7 @@
 using FoederDomain.CustomExceptions;
 using FoederDomain.DomainModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 
 namespace FoederAPI.Controllers;
 
@@ -57,9 +58,37 @@ public class HouseholdInviteController : ControllerBase
         {
             return NotFound(ex.Message);
         }
-        catch (Exception ex)
+        catch (SqlException ex)
         {
             return StatusCode(500, ex);
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> RespondToHouseholdInvite(HouseholdInvite householdInvite)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        if (householdInvite.IsAccepted == null)
+        {
+            return BadRequest("Household invite does not have accepted values");
+        }
+
+        try
+        {
+            await _householdInvitesService.RespondToHouseholdInvite(householdInvite);
+            return Ok();
+        }
+        catch (UserNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (SqlException ex)
+        {
+            return StatusCode(500, ex.Message);
         }
     }
     
