@@ -41,6 +41,11 @@ public class HouseholdInvitesService : IHouseholdInvitesService
                 throw new UserNotFoundException();
             }
 
+            if (user.Household != null)
+            {
+                throw new UserAlreadyHasHouseholdException();
+            }
+
             var household = await _householdRepository.GetHouseholdById(householdId);
 
             if (household is null)

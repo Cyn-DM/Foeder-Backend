@@ -1,4 +1,5 @@
 ﻿using FoederBusiness.Interfaces;
+using FoederBusiness.Services;
 using FoederDomain.CustomExceptions;
 using FoederDomain.DomainModels;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ public class HouseholdInviteController : ControllerBase
         _householdInvitesService = householdInvitesService;
     }
 
-    [HttpGet]
+    [HttpGet("GetHouseholdInvites")]
     public async Task<IActionResult> GetHouseholdInvites(Guid userId)
     {
         try
@@ -35,8 +36,8 @@ public class HouseholdInviteController : ControllerBase
         }
     }
 
-    [HttpPost]
-    public async Task<IActionResult> PostHouseholdInvite(string email, Guid householdId)
+    [HttpPost("PostHouseholdInvite")]
+    public async Task<IActionResult> PostHouseholdInvite([FromBody]InviteRequest inviteRequest)
     {
         if (!ModelState.IsValid)
         {
@@ -45,7 +46,7 @@ public class HouseholdInviteController : ControllerBase
 
         try
         {
-            var validation = await _householdInvitesService.InviteToHousehold(email, householdId);
+            var validation = await _householdInvitesService.InviteToHousehold(inviteRequest.Email, inviteRequest.HouseholdId);
 
             if (validation.ValidationResults.Count > 0)
             {
@@ -53,6 +54,10 @@ public class HouseholdInviteController : ControllerBase
             }
 
             return !validation.hasOperationSucceeded ? StatusCode(500) : Ok();
+        }
+        catch (UserAlreadyHasHouseholdException ex)
+        {
+            return StatusCode(409, ex.Message);
         }
         catch (UserNotFoundException ex)
         {
@@ -68,7 +73,7 @@ public class HouseholdInviteController : ControllerBase
         }
     }
 
-    [HttpPost]
+    [HttpPost("RespondToHouseholdInvite")]
     public async Task<IActionResult> RespondToHouseholdInvite(HouseholdInvite householdInvite)
     {
         if (!ModelState.IsValid)
@@ -95,6 +100,10 @@ public class HouseholdInviteController : ControllerBase
             return StatusCode(500, ex.Message);
         }
     }
-    
-   
+
+    public class InviteRequest()
+    {
+        public string Email { get; set; }
+        public Guid HouseholdId { get; set; }
+    }
 }
