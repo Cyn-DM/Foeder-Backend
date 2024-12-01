@@ -36,16 +36,16 @@ public class HouseholdInviteController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostHouseholdInvite(HouseholdInvite householdInvite)
+    public async Task<IActionResult> PostHouseholdInvite(string email, Guid householdId)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
-        
+
         try
         {
-            var validation = await _householdInvitesService.InviteToHousehold(householdInvite);
+            var validation = await _householdInvitesService.InviteToHousehold(email, householdId);
 
             if (validation.ValidationResults.Count > 0)
             {
@@ -55,6 +55,10 @@ public class HouseholdInviteController : ControllerBase
             return !validation.hasOperationSucceeded ? StatusCode(500) : Ok();
         }
         catch (UserNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (HouseholdNotFoundException ex)
         {
             return NotFound(ex.Message);
         }

@@ -12,11 +12,13 @@ public class HouseholdInvitesService : IHouseholdInvitesService
 {
     private readonly IHouseholdInvitesRepository _householdInvitesRepository;
     private readonly IAuthRepository _authRepository;
+    private readonly IHouseholdRepository _householdRepository;
 
-    public HouseholdInvitesService(IHouseholdInvitesRepository householdInvitesRepository, IAuthRepository authRepository)
+    public HouseholdInvitesService(IHouseholdInvitesRepository householdInvitesRepository, IAuthRepository authRepository, IHouseholdRepository householdRepository)
     {
         _householdInvitesRepository = householdInvitesRepository;
         _authRepository = authRepository;
+        _householdRepository = householdRepository;
     }
     public async Task<List<HouseholdInvite>> GetHouseholdInvites(Guid userId)
     {
@@ -27,17 +29,28 @@ public class HouseholdInvitesService : IHouseholdInvitesService
         return await _householdInvitesRepository.GetHouseholdInvites(userId);
     }
 
-    public async Task<ValidationDTO> InviteToHousehold(HouseholdInvite householdInvite)
+    public async Task<ValidationDTO> InviteToHousehold(string email, Guid householdId)
     {
         var validation = new ValidationDTO();
 
         try
         {
-            var user = await _authRepository.FindUserByEmail(householdInvite.InvitedUser.Email);
+            var user = await _authRepository.FindUserByEmail(email);
             if (user is null)
             {
                 throw new UserNotFoundException();
             }
+
+            var household = await _householdRepository.GetHouseholdById(householdId);
+
+            if (household is null)
+            {
+                throw new HouseholdNotFoundException();
+            }
+
+            var householdInvite = new HouseholdInvite();
+            householdInvite.Household = household;
+            householdInvite.InvitedUser = user;
 
             await _householdInvitesRepository.InviteToHousehold(householdInvite);
 

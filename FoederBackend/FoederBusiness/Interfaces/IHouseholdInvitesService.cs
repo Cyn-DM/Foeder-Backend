@@ -6,6 +6,6 @@ namespace FoederBusiness.Interfaces;
 public interface IHouseholdInvitesService
 {
     Task<List<HouseholdInvite>> GetHouseholdInvites(Guid userId);
-    Task<ValidationDTO> InviteToHousehold(HouseholdInvite householdInvite);
+    Task<ValidationDTO> InviteToHousehold(string email, Guid householdId);
     Task RespondToHouseholdInvite(HouseholdInvite householdInvite);
 }
