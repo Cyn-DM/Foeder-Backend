@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using FoederBusiness.Interfaces;
 using FoederBusiness.Services;
+using FoederDomain.CustomExceptions;
 using FoederDomain.DomainModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -57,5 +58,27 @@ public class HouseholdController : ControllerBase
         }
 
         return Ok(household);
+    }
+
+    [HttpDelete("LeaveHousehold")]
+    public async Task<IActionResult> LeaveHousehold(Guid userId)
+    {
+        try
+        {
+            await _householdService.LeaveHousehold(userId);
+            return Ok();
+        }
+        catch (HouseholdNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (UserNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
     }
 }

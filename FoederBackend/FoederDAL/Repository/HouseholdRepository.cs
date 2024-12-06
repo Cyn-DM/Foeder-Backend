@@ -38,4 +38,12 @@ public class HouseholdRepository : IHouseholdRepository
 
         return household;
     }
+
+    public async Task LeaveHousehold(Household household, User user)
+    {
+        user.HouseholdId = null;
+        household.Users.Remove(user);
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+    }
 }
