@@ -16,6 +16,7 @@ public class HouseholdInvitesRepository : IHouseholdInvitesRepository
     public async Task<List<HouseholdInvite>> GetHouseholdInvites(Guid userId)
     {
         List<HouseholdInvite> foundInvites = await _context.HouseholdInvites
+            .Include(x => x.Household)
             .Where(x => x.InvitedUser.Id == userId)
             .ToListAsync();
 
@@ -45,5 +46,21 @@ public class HouseholdInvitesRepository : IHouseholdInvitesRepository
             _context.HouseholdInvites.Update(householdInvite);
         }
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<HouseholdInvite> GetHouseholdInviteById(Guid inviteId)
+    {
+         var invite = await _context.HouseholdInvites
+             .Include(x => x.InvitedUser)
+             .Include(x => x.Household)
+             .FirstOrDefaultAsync(x => x.Id == inviteId);
+
+         
+         if (invite == null)
+         {
+             throw new InviteNotFoundException();
+         }
+
+         return invite;
     }
 }

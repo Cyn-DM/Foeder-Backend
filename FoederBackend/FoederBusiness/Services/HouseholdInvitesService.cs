@@ -71,8 +71,12 @@ public class HouseholdInvitesService : IHouseholdInvitesService
         }
     }
 
-    public async Task RespondToHouseholdInvite(HouseholdInvite householdInvite)
+    public async Task RespondToHouseholdInvite(Guid inviteId, bool isAccepted)
     {
-        await _householdInvitesRepository.UpdateHouseholdInvite(householdInvite);
+        var invite = await _householdInvitesRepository.GetHouseholdInviteById(inviteId);
+        
+        invite.IsAccepted = isAccepted;
+        
+        await _householdInvitesRepository.UpdateHouseholdInvite(invite);
     }
 }

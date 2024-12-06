@@ -6,7 +6,7 @@ namespace FoederDomain.DomainModels;
 public class HouseholdInvite
 {
     public Guid Id { get; set; }
-    [JsonIgnore, Required]
+    [Required]
     public Household Household { get; set; }
     [Required]
     public User InvitedUser { get; set; }

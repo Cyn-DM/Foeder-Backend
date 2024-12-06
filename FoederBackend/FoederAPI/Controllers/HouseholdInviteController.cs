@@ -1,5 +1,7 @@
-﻿using FoederBusiness.Interfaces;
+﻿using System.ComponentModel.DataAnnotations;
+using FoederBusiness.Interfaces;
 using FoederBusiness.Services;
+using FoederDAL.Repository;
 using FoederDomain.CustomExceptions;
 using FoederDomain.DomainModels;
 using Microsoft.AspNetCore.Mvc;
@@ -74,22 +76,27 @@ public class HouseholdInviteController : ControllerBase
     }
 
     [HttpPost("RespondToHouseholdInvite")]
-    public async Task<IActionResult> RespondToHouseholdInvite(HouseholdInvite householdInvite)
+    public async Task<IActionResult> RespondToHouseholdInvite(InviteResponse inviteResponse)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        if (householdInvite.IsAccepted == null)
+        if (inviteResponse.IsAccepted == null)
         {
             return BadRequest("Household invite does not have accepted values");
         }
 
         try
         {
-            await _householdInvitesService.RespondToHouseholdInvite(householdInvite);
+            await _householdInvitesService.RespondToHouseholdInvite(inviteResponse.Id,
+                inviteResponse.IsAccepted.Value);
             return Ok();
+        }
+        catch (InviteNotFoundException ex)
+        {
+            return NotFound(ex.Message);
         }
         catch (UserNotFoundException ex)
         {
@@ -105,5 +112,13 @@ public class HouseholdInviteController : ControllerBase
     {
         public string Email { get; set; }
         public Guid HouseholdId { get; set; }
+    }
+
+    public class InviteResponse()
+    {
+        [Required]
+        public Guid Id { get; set; }
+        [Required]
+        public bool? IsAccepted { get; set; } 
     }
 }

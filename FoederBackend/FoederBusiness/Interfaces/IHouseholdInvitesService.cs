@@ -7,5 +7,5 @@ public interface IHouseholdInvitesService
 {
     Task<List<HouseholdInvite>> GetHouseholdInvites(Guid userId);
     Task<ValidationDTO> InviteToHousehold(string email, Guid householdId);
-    Task RespondToHouseholdInvite(HouseholdInvite householdInvite);
+    Task RespondToHouseholdInvite(Guid inviteId, bool isAccepted);
 }
