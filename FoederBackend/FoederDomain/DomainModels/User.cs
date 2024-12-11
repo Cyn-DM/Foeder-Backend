@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace FoederDomain.DomainModels;
 
-public class User
+public class User 
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }

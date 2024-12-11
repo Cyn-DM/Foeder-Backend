@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using FoederBusiness.Helpers;
 using FoederBusiness.Interfaces;
 using FoederBusiness.Tools;
+using FoederDomain.CustomExceptions;
 using FoederDomain.DomainModels;
 using FoederDomain.Interfaces;
 using Microsoft.Data.SqlClient;
@@ -56,5 +57,22 @@ public class HouseholdService : IHouseholdService
         var household = await _householdRepository.GetHouseholdByUserId(userId);
         
         return household;
+    }
+
+    public async Task LeaveHousehold(Guid userId)
+    {
+        var user = await _authRepository.FindUserById(userId);
+        if (user == null)
+        {
+            throw new UserNotFoundException();
+        }
+
+        var household = await _householdRepository.GetHouseholdByUserId(userId);
+        if (household == null)
+        {
+            throw new HouseholdNotFoundException();
+        }
+        
+        await _householdRepository.LeaveHousehold(household, user);
     }
 }

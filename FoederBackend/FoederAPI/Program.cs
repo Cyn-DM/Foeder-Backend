@@ -1,6 +1,7 @@
 using FoederDAL;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
+using System.Text.Json.Serialization;
 using FoederBusiness;
 using FoederBusiness.Helpers;
 using FoederBusiness.Interfaces;
@@ -25,8 +26,12 @@ try
     builder.Host.UseSerilog();
 
     // Add services to the container.
-    
+
     builder.Services.AddControllers();
+    builder.Services.AddControllers().AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
@@ -61,6 +66,7 @@ try
     
     //Dependencies
     builder.Services.AddDbContext<MssqlDbContext>(options => options.UseSqlServer(dbConnectionString));
+    
     builder.Services.AddScoped<IJwtAuthTokenUtils, JwtAuthTokenUtils>();
     builder.Services.AddScoped<IGoogleTokenVerifier, GoogleTokenVerifier>();
     builder.Services.AddScoped<IRecipeRepository, RecipeRepository>();
@@ -69,6 +75,9 @@ try
     builder.Services.AddScoped<IAuthRepository, AuthRepository>();
     builder.Services.AddScoped<IHouseholdRepository, HouseholdRepository>();
     builder.Services.AddScoped<IHouseholdService, HouseholdService>();
+    builder.Services.AddScoped<IHouseholdInvitesRepository, HouseholdInvitesRepository>();
+    builder.Services.AddScoped<IHouseholdInvitesService, HouseholdInvitesService>();
+    
     builder.Services.AddSingleton<AuthSettings>(sp => new AuthSettings(jwtSecret ?? throw new Exception("Add jwtSecret."),
         jwtIssuer ?? throw new Exception("Add issuer."),
         jwtAudience ?? throw new Exception("Add audience."),

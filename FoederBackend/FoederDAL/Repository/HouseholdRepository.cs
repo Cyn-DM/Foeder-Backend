@@ -31,4 +31,19 @@ public class HouseholdRepository : IHouseholdRepository
 
         return household;
     }
+
+    public async Task<Household?> GetHouseholdById(Guid householdId)
+    {
+        var household = await _context.Households.FindAsync(householdId);
+
+        return household;
+    }
+
+    public async Task LeaveHousehold(Household household, User user)
+    {
+        user.HouseholdId = null;
+        household.Users.Remove(user);
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+    }
 }

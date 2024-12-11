@@ -16,6 +16,8 @@ namespace FoederDAL
         public DbSet<User> Users { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         
+        public DbSet<HouseholdInvite> HouseholdInvites { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>()
