@@ -22,34 +22,33 @@ public class HouseholdService : IHouseholdService
     public async Task<ValidationDTO> AddHousehold(Household household, string bearerToken)
     {
         var dto = ValidationUtils.ValidateObject(household);
-        var email = JwtAuthTokenUtils.GetUserEmailFromToken(bearerToken);
-        
-        if (email != null){
-            try
-            {
-                var user = await _authRepository.FindUserByEmail(email);
-                
-                if (user != null)
-                {
-                    if (user.Household != null)
-                    {
-                        dto.ValidationResults.Add(new ValidationResult("Household already added."));
-                        dto.hasOperationSucceeded = false;
-                        return dto;
-                    } 
-                    
-                    await _householdRepository.AddHousehold(household, user);
-                    dto.hasOperationSucceeded = true;
-                }
-            }
-            catch (SqlException e)
-            {
-                dto.hasOperationSucceeded = false;
-            }
-        }
-       
-        return dto;
 
+        if (dto.ValidationResults.Count > 0)
+        {
+            return dto;
+        }
+        
+        var email = JwtAuthTokenUtils.GetUserEmailFromToken(bearerToken);
+
+        if (email == null)
+        {
+            throw new InvalidBearerTokenException();
+        }
+        
+        var user = await _authRepository.FindUserByEmail(email);
+
+        if (user == null)
+        {
+            throw new UserNotFoundException();
+        }
+
+        if (user.Household != null)
+        {
+            throw new UserAlreadyHasHouseholdException();
+        }
+        
+        await _householdRepository.AddHousehold(household, user);
+        return dto;
     }
 
     public async Task<Household?> GetHouseholdByUserId(Guid userId)

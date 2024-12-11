@@ -58,6 +58,8 @@ namespace FoederBusiness.Services
             if (storedRefreshToken.ExpirationDate < DateTime.Now)
             {
                 refreshResult.IsRefreshTokenExpired = true;
+                refreshResult.isRefreshTokenFound = true;
+                return refreshResult;
             }
             
             refreshResult.AccessToken = _jwtAuthTokenUtils.GenerateAccessToken(storedRefreshToken.User);

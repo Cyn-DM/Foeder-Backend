@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using FoederBusiness.Helpers;
 using FoederBusiness.Interfaces;
 using FoederBusiness.Services;
 using FoederDomain.CustomExceptions;
@@ -29,17 +30,28 @@ public class HouseholdController : ControllerBase
             return BadRequest(results.Select(m => m.ErrorMessage).ToList());
         }
 
+        
         var bearerToken = HttpContext.Request.Headers["Authorization"].ToString();
-        var validationResult = await _householdService.AddHousehold(household, bearerToken);
-    
-        if (validationResult.ValidationResults.Count != 0)
+        
+        try
         {
-            return BadRequest(validationResult.ValidationResults.Select(m => m.ErrorMessage).ToList());
+            var validationResult = await _householdService.AddHousehold(household, bearerToken);
+            if (validationResult.ValidationResults.Count != 0)
+            {
+                return BadRequest(validationResult.ValidationResults.Select(m => m.ErrorMessage).ToList());
+            }
         }
-
-        if (!validationResult.hasOperationSucceeded)
+        catch (InvalidBearerTokenException ex)
         {
-            return StatusCode(500);
+            return BadRequest(ex.Message);
+        }
+        catch (UserNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (UserAlreadyHasHouseholdException ex)
+        {
+            return Conflict(ex.Message);
         }
 
         return Ok();

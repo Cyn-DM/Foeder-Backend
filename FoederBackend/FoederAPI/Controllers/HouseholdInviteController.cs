@@ -48,14 +48,9 @@ public class HouseholdInviteController : ControllerBase
 
         try
         {
-            var validation = await _householdInvitesService.InviteToHousehold(inviteRequest.Email, inviteRequest.HouseholdId);
+            await _householdInvitesService.InviteToHousehold(inviteRequest.Email, inviteRequest.HouseholdId);
 
-            if (validation.ValidationResults.Count > 0)
-            {
-                return BadRequest(validation.ValidationResults);
-            }
-
-            return !validation.hasOperationSucceeded ? StatusCode(500) : Ok();
+            return Ok();
         }
         catch (UserAlreadyHasHouseholdException ex)
         {
