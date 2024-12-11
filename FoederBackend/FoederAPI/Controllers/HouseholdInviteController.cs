@@ -30,11 +30,11 @@ public class HouseholdInviteController : ControllerBase
         }
         catch (UserNotFoundException ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(new {message = ex.Message});
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex);
+            return StatusCode(500, new {message = ex.Message});
         }
     }
 
@@ -59,19 +59,19 @@ public class HouseholdInviteController : ControllerBase
         }
         catch (UserAlreadyHasHouseholdException ex)
         {
-            return StatusCode(409, ex.Message);
+            return StatusCode(409, new {message = ex.Message});
         }
         catch (UserNotFoundException ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(new {message = ex.Message});
         }
         catch (HouseholdNotFoundException ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(new {message = ex.Message});
         }
         catch (SqlException ex)
         {
-            return StatusCode(500, ex);
+            return StatusCode(500, new {message = ex.Message});
         }
     }
 
@@ -96,15 +96,15 @@ public class HouseholdInviteController : ControllerBase
         }
         catch (InviteNotFoundException ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(new {message = ex.Message});
         }
         catch (UserNotFoundException ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(new {message = ex.Message});
         }
         catch (SqlException ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new {message = ex.Message});
         }
     }
 

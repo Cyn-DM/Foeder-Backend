@@ -70,15 +70,15 @@ public class HouseholdController : ControllerBase
         }
         catch (HouseholdNotFoundException ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(new {message = ex.Message});
         }
         catch (UserNotFoundException ex)
         {
-            return NotFound(ex.Message);
+            return NotFound(new {message = ex.Message});
         }
         catch (Exception ex)
         {
-            return StatusCode(500, ex.Message);
+            return StatusCode(500, new {message = ex.Message});
         }
     }
 }
