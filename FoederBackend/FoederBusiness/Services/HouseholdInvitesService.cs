@@ -29,12 +29,9 @@ public class HouseholdInvitesService : IHouseholdInvitesService
         return await _householdInvitesRepository.GetHouseholdInvites(userId);
     }
 
-    public async Task<ValidationDTO> InviteToHousehold(string email, Guid householdId)
+    public async Task InviteToHousehold(string email, Guid householdId)
     {
-        var validation = new ValidationDTO();
-
-        try
-        {
+        
             var user = await _authRepository.FindUserByEmail(email);
             if (user is null)
             {
@@ -58,17 +55,6 @@ public class HouseholdInvitesService : IHouseholdInvitesService
             householdInvite.InvitedUser = user;
 
             await _householdInvitesRepository.InviteToHousehold(householdInvite);
-
-            validation.hasOperationSucceeded = true;
-            return validation;
-
-        }
-        catch (SqlException ex)
-        {
-            validation.hasOperationSucceeded = false;
-            validation.ValidationResults.Add(new ValidationResult(ex.Message));
-            return validation;
-        }
     }
 
     public async Task RespondToHouseholdInvite(Guid inviteId, bool isAccepted)

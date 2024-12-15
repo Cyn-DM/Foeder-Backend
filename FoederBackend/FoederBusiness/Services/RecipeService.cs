@@ -3,7 +3,7 @@ using FoederBusiness.Interfaces;
 using FoederDomain.DomainModels;
 using FoederDomain.Interfaces;
 
-namespace FoederBusiness;
+namespace FoederBusiness.Services;
 
 public class RecipeService : IRecipeService
 {

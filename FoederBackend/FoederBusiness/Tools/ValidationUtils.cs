@@ -15,7 +15,6 @@ public static class ValidationUtils
         
         if (validationResults.Any())
         {
-            dto.hasOperationSucceeded = false;
             dto.ValidationResults = validationResults;
         }
 
