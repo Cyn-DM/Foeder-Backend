@@ -4,6 +4,7 @@ using FoederBusiness.Services;
 using FoederDAL.Repository;
 using FoederDomain.CustomExceptions;
 using FoederDomain.DomainModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 
@@ -21,6 +22,7 @@ public class HouseholdInviteController : ControllerBase
     }
 
     [HttpGet("GetHouseholdInvites")]
+    [Authorize]
     public async Task<IActionResult> GetHouseholdInvites(Guid userId)
     {
         try
@@ -39,6 +41,7 @@ public class HouseholdInviteController : ControllerBase
     }
 
     [HttpPost("PostHouseholdInvite")]
+    [Authorize]
     public async Task<IActionResult> PostHouseholdInvite([FromBody]InviteRequest inviteRequest)
     {
         if (!ModelState.IsValid)
@@ -71,6 +74,7 @@ public class HouseholdInviteController : ControllerBase
     }
 
     [HttpPost("RespondToHouseholdInvite")]
+    [Authorize]
     public async Task<IActionResult> RespondToHouseholdInvite(InviteResponse inviteResponse)
     {
         if (!ModelState.IsValid)

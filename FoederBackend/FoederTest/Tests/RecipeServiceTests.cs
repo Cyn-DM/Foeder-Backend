@@ -1,35 +1,203 @@
-using FoederBusiness.Dtos;
 using FoederBusiness.Interfaces;
+using FoederBusiness.Services;
+using FoederDAL.Repository;
+using FoederDomain.CustomExceptions;
+using FoederDomain.DomainModels;
 using FoederDomain.Interfaces;
-using FoederTest.Mocks;
-using Microsoft.Extensions.DependencyInjection;
+using Moq;
 
-namespace FoederTest
+namespace FoederTest;
+
+[TestFixture]
+public class RecipeServiceTests
 {
-    [TestFixture]
-    public class RecipeServiceTests
+    private (RecipeService service, Household validHousehold, Household invalidHousehold) GetSetup()
     {
-        private readonly IRecipeService _recipeService;
-        public RecipeServiceTests()
+        var mockHouseholdRepo = new Mock<IHouseholdRepository>();
+        var mockRecipeRepo = new Mock<IRecipeRepository>();
+        var recipeService = new RecipeService(mockRecipeRepo.Object, mockHouseholdRepo.Object);
+        
+        var validHousehold = new Household()
         {
-            var services = new ServiceCollection();
+            Id = Guid.NewGuid(),
+            Name = "Test",
+        };
 
-            services.AddTransient<IRecipeService, RecipeServiceMock>();
-            services.AddTransient<IRecipeRepository, RecipeRepositoryMock>();
-
-            var serviceProvider = services.BuildServiceProvider();
-
-            _recipeService = serviceProvider.GetService<IRecipeService>()!;
-
-        }
-
-        [Test]
-        public async Task AssertGetRecipeResponses()
+        var invalidHousehold = new Household()
         {
-            List<GetRecipesResponse> responses = await _recipeService.GetRecipes();
+            Id = Guid.NewGuid(),
+            Name = "Test",
+        };
+        
+        mockHouseholdRepo
+            .Setup(x => x.GetHouseholdById(It.Is<Guid>( x => x == validHousehold.Id)))
+            .ReturnsAsync(validHousehold);
+        mockHouseholdRepo
+            .Setup(x => x.GetHouseholdById(It.Is<Guid>(x => x == invalidHousehold.Id)))
+            .ReturnsAsync((Household?)null);
+        
+        return (recipeService, validHousehold, invalidHousehold);
+    }
 
-            Assert.IsNotEmpty(responses);
-            
-        }
+    [Test]
+    public void AddRecipeTestSuccessful()
+    {
+        var setup = GetSetup();
+        
+        var validRecipe = new Recipe()
+        {
+            Household = setup.validHousehold,
+            Description = "Classic",
+            HouseholdId = setup.validHousehold.Id,
+            Ingredients = new List<Ingredient>()
+            {
+                new Ingredient()
+                {
+                    Amount = "10 spoonfuls",
+                    Name = "Milk",
+                }
+            },
+            Title = "Glass of Milk",
+            Steps = new List<string>()
+            {
+                "Add spoons of milk to glass."
+            },
+        };
+        
+        Assert.DoesNotThrowAsync(() => setup.service.AddRecipe(validRecipe));
+    }
+
+    [Test]
+    public void AddRecipeTestFailInvalidHousehold()
+    {
+        var setup = GetSetup();
+        
+        var validRecipeInvalidHousehold = new Recipe()
+        {
+            Household = setup.invalidHousehold,
+            Description = "Classic",
+            HouseholdId = setup.invalidHousehold.Id,
+            Ingredients = new List<Ingredient>()
+            {
+                new Ingredient()
+                {
+                    Amount = "10 spoonfuls",
+                    Name = "Milk",
+                }
+            },
+            Title = "Glass of Milk",
+            Steps = new List<string>()
+            {
+                "Add spoons of milk to glass."
+            },
+        };
+        
+        Assert.ThrowsAsync<HouseholdNotFoundException>(() => setup.service.AddRecipe(validRecipeInvalidHousehold));
+    }
+
+    [Test]
+    public void AddRecipeTestFailInvalidRecipeNoTitle()
+    {
+        var setup = GetSetup();
+        
+        var invalidRecipe = new Recipe()
+        {
+            Household = setup.validHousehold,
+            Description = "Classic",
+            HouseholdId = setup.validHousehold.Id,
+            Ingredients = new List<Ingredient>()
+            {
+                new Ingredient()
+                {
+                    Amount = "10 spoonfuls",
+                    Name = "Milk",
+                }
+            },
+            Steps = new List<string>()
+            {
+                "Add spoons of milk to glass."
+            },
+        };
+        
+        Assert.ThrowsAsync<InvalidObjectException>(() => setup.service.AddRecipe(invalidRecipe));
+    }
+    
+    
+    [Test]
+    public void AddRecipeTestFailInvalidRecipeEmptyTitle()
+    {
+        var setup = GetSetup();
+        
+        var invalidRecipe = new Recipe()
+        {
+            Household = setup.validHousehold,
+            Description = "Classic",
+            HouseholdId = setup.validHousehold.Id,
+            Ingredients = new List<Ingredient>()
+            {
+                new Ingredient()
+                {
+                    Amount = "10 spoonfuls",
+                    Name = "Milk",
+                }
+            },
+            Title = "",
+            Steps = new List<string>()
+            {
+                "Add spoons of milk to glass."
+            },
+        };
+        
+        Assert.ThrowsAsync<InvalidObjectException>(() => setup.service.AddRecipe(invalidRecipe));
+    }
+    
+    [Test]
+    public void AddRecipeTestFailInvalidRecipeTooLongTitle()
+    {
+        var setup = GetSetup();
+        
+        var invalidRecipe = new Recipe()
+        {
+            Household = setup.validHousehold,
+            Description = "Classic",
+            HouseholdId = setup.validHousehold.Id,
+            Ingredients = new List<Ingredient>()
+            {
+                new Ingredient()
+                {
+                    Amount = "10 spoonfuls",
+                    Name = "Milk",
+                }
+            },
+            Title =
+                "TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest",
+            Steps = new List<string>()
+            {
+                "Add spoons of milk to glass."
+            },
+        };
+        
+        Assert.ThrowsAsync<InvalidObjectException>(() => setup.service.AddRecipe(invalidRecipe));
+    }
+     
+    [Test]
+    public void AddRecipeTestFailInvalidRecipeNoIngredients()
+    {
+        var setup = GetSetup();
+        
+        var invalidRecipe = new Recipe()
+        {
+            Household = setup.validHousehold,
+            Description = "Classic",
+            HouseholdId = setup.validHousehold.Id,
+            Ingredients = new List<Ingredient>(),
+            Title = "Test",
+            Steps = new List<string>()
+            {
+                "Add spoons of milk to glass."
+            },
+        };
+        
+        Assert.ThrowsAsync<InvalidObjectException>(() => setup.service.AddRecipe(invalidRecipe));
     }
 }

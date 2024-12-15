@@ -4,6 +4,7 @@ using FoederBusiness.Interfaces;
 using FoederBusiness.Services;
 using FoederDomain.CustomExceptions;
 using FoederDomain.DomainModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoederAPI.Controllers;
@@ -20,26 +21,18 @@ public class HouseholdController : ControllerBase
     }
     
     [HttpPost("AddHousehold")]
+    [Authorize]
     public async Task<IActionResult> AddHousehold(Household household)
     {
-        var results = new List<ValidationResult>();
-        Validator.TryValidateObject(household, new ValidationContext(household), results);
-    
-        if (results.Any())
-        {
-            return BadRequest(results.Select(m => m.ErrorMessage).ToList());
-        }
-
-        
         var bearerToken = HttpContext.Request.Headers["Authorization"].ToString();
-        
+
         try
         {
-            var validationResult = await _householdService.AddHousehold(household, bearerToken);
-            if (validationResult.ValidationResults.Count != 0)
-            {
-                return BadRequest(validationResult.ValidationResults.Select(m => m.ErrorMessage).ToList());
-            }
+            await _householdService.AddHousehold(household, bearerToken);
+        }
+        catch (InvalidObjectException ex)
+        {
+            return BadRequest(ex.ValidationResults.Select(m => m.ErrorMessage).ToList());
         }
         catch (InvalidBearerTokenException ex)
         {
@@ -60,6 +53,7 @@ public class HouseholdController : ControllerBase
     }
 
     [HttpGet("GetHouseholdByUser")]
+    [Authorize]
     public async Task<IActionResult> GetHouseholdByUserId(Guid userId)
     {
         var household = await _householdService.GetHouseholdByUserId(userId);
@@ -73,6 +67,7 @@ public class HouseholdController : ControllerBase
     }
 
     [HttpDelete("LeaveHousehold")]
+    [Authorize]
     public async Task<IActionResult> LeaveHousehold(Guid userId)
     {
         try

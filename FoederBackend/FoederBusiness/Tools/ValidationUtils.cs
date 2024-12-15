@@ -1,23 +1,20 @@
 using System.ComponentModel.DataAnnotations;
 using FoederBusiness.Helpers;
+using FoederDomain.CustomExceptions;
 
 namespace FoederBusiness.Tools;
 
 public static class ValidationUtils
 {
-    public static ValidationDTO ValidateObject<T>(T obj)
+    public static void ValidateObject<T>(T obj)
     where T : class
     {
         List<ValidationResult> validationResults = new List<ValidationResult>();
         Validator.TryValidateObject(obj, new ValidationContext(obj), validationResults, true);
 
-        var dto = new ValidationDTO();
-        
         if (validationResults.Any())
         {
-            dto.ValidationResults = validationResults;
+            throw new InvalidObjectException(validationResults);
         }
-
-        return dto;
     }
 }

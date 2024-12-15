@@ -6,7 +6,7 @@ namespace FoederDAL.Repository
 {
     public class RecipeRepository : IRecipeRepository
     {
-        private readonly MssqlDbContext? _context;
+        private readonly MssqlDbContext _context;
 
         public RecipeRepository(MssqlDbContext context)
         {
@@ -17,7 +17,11 @@ namespace FoederDAL.Repository
         {
             return await _context!.Recipes.ToListAsync();
         }
-        
-        
+
+        public async Task AddRecipe(Recipe recipe)
+        {
+            await _context.Recipes.AddAsync(recipe);
+            await _context.SaveChangesAsync();
+        }
     }
 }
