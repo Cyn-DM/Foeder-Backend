@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using FoederBusiness.Interfaces;
 using FoederBusiness.Services;
+using FoederBusiness.Tools;
 using FoederDAL.Repository;
 using FoederDomain.CustomExceptions;
 using FoederDomain.DomainModels;
@@ -45,6 +46,29 @@ public class HouseholdInviteController : ControllerBase
         {
             return BadRequest(ModelState);
         }
+        
+        var bearerToken = HttpContext.Request.Headers["Authorization"].ToString();
+
+        try
+        {
+            var householdId = JwtAuthTokenUtils.GetUserHouseholdIdFromToken(bearerToken);
+
+            if (householdId == null)
+            {
+                return Unauthorized();
+            }
+
+            if (householdId != inviteRequest.HouseholdId)
+            {
+                return BadRequest("You cannot invite someone to a household you do not belong to.");
+            }
+
+        }
+        catch (InvalidHouseholdIdException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+
 
         try
         {

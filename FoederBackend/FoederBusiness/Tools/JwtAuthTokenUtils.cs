@@ -74,4 +74,32 @@ public class JwtAuthTokenUtils : IJwtAuthTokenUtils
         return readToken.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
         
     }
+
+    public static Guid? GetUserHouseholdIdFromToken(string bearerToken)
+    {
+        var token = bearerToken.Replace("Bearer ", "");
+        var handler = new JwtSecurityTokenHandler();
+        var readToken = handler.ReadJwtToken(token);
+        
+        var householdIdString = readToken.Claims.FirstOrDefault(c => c.Type == "HouseholdId")?.Value;
+
+        try
+        {
+            return Guid.Parse(householdIdString);
+        }
+        catch (ArgumentNullException)
+        {
+            return null;
+        }
+        catch (FormatException)
+        {
+            throw new InvalidHouseholdIdException();
+        }
+        
+    }
+}
+
+public class InvalidHouseholdIdException : Exception
+{
+    public override string Message => "Invalid Household Id. Please try again.";
 }
