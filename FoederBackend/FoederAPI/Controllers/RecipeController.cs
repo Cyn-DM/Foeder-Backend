@@ -1,4 +1,5 @@
-﻿using FoederBusiness.Dtos;
+﻿using System.ComponentModel.DataAnnotations;
+using FoederBusiness.Dtos;
 using FoederBusiness.Interfaces;
 using FoederDomain.CustomExceptions;
 using FoederDomain.DomainModels;
@@ -24,7 +25,7 @@ public class RecipeController : ControllerBase
         return await _recipeService.GetRecipes();
     }
 
-    [HttpPost]
+    [HttpPost("AddRecipe")]
     [Authorize]
     public async Task<IActionResult> AddRecipe(Recipe recipe)
     {
