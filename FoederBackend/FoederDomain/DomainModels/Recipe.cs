@@ -14,6 +14,7 @@ public class Recipe
     public string Description { get; set; } = string.Empty;
     [Required, NotEmpty]
     public List<Ingredient> Ingredients { get; set; } = new();
+    [MaxLength(250)]
     public List<string> Steps { get; set; } = new();
     [Required]
     public Guid HouseholdId { get; set; }
