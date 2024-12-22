@@ -13,9 +13,9 @@ namespace FoederDAL.Repository
                 this._context = context;
         }
 
-        public async Task<List<Recipe>> GetRecipes()
+        public async Task<List<Recipe>> GetRecipes(Guid householdId)
         {
-            return await _context!.Recipes.ToListAsync();
+            return await _context!.Recipes.Where(recipe => recipe.HouseholdId == householdId).ToListAsync();
         }
 
         public async Task AddRecipe(Recipe recipe)
