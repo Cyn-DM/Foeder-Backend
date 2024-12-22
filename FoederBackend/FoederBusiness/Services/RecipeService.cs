@@ -61,4 +61,16 @@ public class RecipeService : IRecipeService
         
         await _recipeRepository.AddRecipe(recipe);
     }
+
+    public async Task<Recipe> GetRecipe(Guid recipeId)
+    {
+        var recipe = await _recipeRepository.GetRecipe(recipeId);
+
+        if (recipe == null)
+        {
+            throw new RecipeNotFoundException();
+        }
+
+        return recipe;
+    }
 }

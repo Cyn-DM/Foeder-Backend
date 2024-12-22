@@ -6,4 +6,5 @@ public interface IRecipeRepository
 {
     Task<List<Recipe>> GetRecipes(Guid householdId);
     Task AddRecipe(Recipe recipe);
+    Task<Recipe?> GetRecipe(Guid recipeId);
 }
