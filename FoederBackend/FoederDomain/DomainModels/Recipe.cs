@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using FoederDomain.CustomValidationAttributes;
 
 namespace FoederDomain.DomainModels;
 
@@ -11,13 +12,13 @@ public class Recipe
     public string Title { get; set; } = string.Empty;
     [MaxLength(250)]
     public string Description { get; set; } = string.Empty;
-    [Required]
+    [Required, NotEmpty]
     public List<Ingredient> Ingredients { get; set; } = new();
+    [MaxLength(250)]
     public List<string> Steps { get; set; } = new();
     [Required]
     public Guid HouseholdId { get; set; }
-    [Required]
-    public Household Household { get; set; }
+    public Household? Household { get; set; }
 
     public Recipe(){}
     

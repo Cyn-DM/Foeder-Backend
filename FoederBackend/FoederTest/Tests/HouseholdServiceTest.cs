@@ -9,7 +9,7 @@ namespace FoederTest;
 [TestFixture]
 public class HouseholdServiceTest
 {
-    private (Mock<IHouseholdRepository> mockHouseholdRepo, Mock<IAuthRepository> mockAuthRepo, Household validHousehold,
+    private (Household validHousehold,
         string bearerToken, HouseholdService service, Household invalidHousehold, string invalidBearerToken, string
         notFoundUserToken, string householdUserToken, Guid userId, Guid noHouseholdUserId) GetSetup()
     {
@@ -59,7 +59,7 @@ public class HouseholdServiceTest
         mockHouseholdRepo.Setup(x => x.GetHouseholdByUserId(It.Is<Guid>(x => x == userId))).ReturnsAsync(validHousehold);
         mockHouseholdRepo.Setup(x => x.GetHouseholdByUserId(It.Is<Guid>(x => x == noHouseholdUserId))).ReturnsAsync(noHousehold);
         
-        return (mockHouseholdRepo, mockAuthRepo, validHousehold, validBearerToken, service, invalidHousehold, invalidBearerToken, notFoundUserToken, householdUserToken, userId, noHouseholdUserId);
+        return (validHousehold, validBearerToken, service, invalidHousehold, invalidBearerToken, notFoundUserToken, householdUserToken, userId, noHouseholdUserId);
     }
 
     [Test]
@@ -75,9 +75,7 @@ public class HouseholdServiceTest
     {
         var setup = GetSetup();
         
-        var result = setup.service.AddHousehold(setup.invalidHousehold, setup.bearerToken);
-        
-        Assert.Greater(result.Result.ValidationResults.Count, 0);
+        Assert.ThrowsAsync<InvalidObjectException>(() => setup.service.AddHousehold(setup.invalidHousehold, setup.bearerToken));
     }
 
     [Test]

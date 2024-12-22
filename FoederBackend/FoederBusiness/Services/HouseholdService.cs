@@ -19,14 +19,9 @@ public class HouseholdService : IHouseholdService
         _householdRepository = householdRepository;
         _authRepository = authRepository;
     }
-    public async Task<ValidationDTO> AddHousehold(Household household, string bearerToken)
+    public async Task AddHousehold(Household household, string bearerToken)
     {
-        var dto = ValidationUtils.ValidateObject(household);
-
-        if (dto.ValidationResults.Count > 0)
-        {
-            return dto;
-        }
+        ValidationUtils.ValidateObject(household);
         
         var email = JwtAuthTokenUtils.GetUserEmailFromToken(bearerToken);
 
@@ -48,7 +43,6 @@ public class HouseholdService : IHouseholdService
         }
         
         await _householdRepository.AddHousehold(household, user);
-        return dto;
     }
 
     public async Task<Household?> GetHouseholdByUserId(Guid userId)
