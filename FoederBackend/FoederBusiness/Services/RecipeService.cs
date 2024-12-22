@@ -19,9 +19,16 @@ public class RecipeService : IRecipeService
         _householdRepository = householdRepository;
     }
 
-    public async Task<List<GetRecipesResponse>> GetRecipes()
+    public async Task<List<GetRecipesResponse>> GetRecipes(Guid householdId)
     {
-        List<Recipe> domainRecipes = await _recipeRepository.GetRecipes();
+        var household = await _householdRepository.GetHouseholdById(householdId);
+
+        if (household == null)
+        {
+            throw new HouseholdNotFoundException();
+        }
+        
+        List<Recipe> domainRecipes = await _recipeRepository.GetRecipes(householdId);
         List<GetRecipesResponse> recipeDtos = new();
 
         if (domainRecipes.Count == 0)

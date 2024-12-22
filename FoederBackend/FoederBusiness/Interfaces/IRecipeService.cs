@@ -6,6 +6,6 @@ namespace FoederBusiness.Interfaces;
 
 public interface IRecipeService
 {
-    Task<List<GetRecipesResponse>> GetRecipes();
+    Task<List<GetRecipesResponse>> GetRecipes(Guid householdId);
     Task AddRecipe(Recipe recipe);
 }

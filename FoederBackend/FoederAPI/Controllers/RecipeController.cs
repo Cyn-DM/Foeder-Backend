@@ -20,9 +20,9 @@ public class RecipeController : ControllerBase
 
     [HttpGet]
     [Authorize]
-    public async Task<ActionResult<List<GetRecipesResponse>>> GetRecipes()
+    public async Task<ActionResult<List<GetRecipesResponse>>> GetRecipes(Guid householdId)
     {
-        return await _recipeService.GetRecipes();
+        return await _recipeService.GetRecipes(householdId);
     }
 
     [HttpPost("AddRecipe")]
