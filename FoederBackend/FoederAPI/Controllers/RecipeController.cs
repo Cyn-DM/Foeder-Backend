@@ -13,6 +13,7 @@ namespace FoederAPI.Controllers;
 public class RecipeController : ControllerBase
 {
     private readonly IRecipeService _recipeService;
+
     public RecipeController(IRecipeService recipeService)
     {
         this._recipeService = recipeService;
@@ -47,7 +48,7 @@ public class RecipeController : ControllerBase
             return StatusCode(500, ex.Message);
         }
     }
-    
+
     [HttpGet("GetRecipe")]
     [Authorize]
     public async Task<IActionResult> GetRecipe(Guid recipeId)
@@ -65,4 +66,28 @@ public class RecipeController : ControllerBase
             return StatusCode(500, ex.Message);
         }
     }
+
+    [HttpPut("UpdateRecipe")]
+    [Authorize]
+    public async Task<IActionResult> UpdateRecipe(Recipe recipe)
+    {
+        try
+        {
+            await _recipeService.UpdateRecipe(recipe);
+            return Ok();
+        } 
+        catch (InvalidObjectException ex)
+        {
+            return BadRequest(ex.ValidationResults);
+        }
+        catch (HouseholdNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+    }
+
 }

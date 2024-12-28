@@ -73,4 +73,16 @@ public class RecipeService : IRecipeService
 
         return recipe;
     }
+
+    public async Task UpdateRecipe(Recipe recipe)
+    {
+        ValidationUtils.ValidateObject(recipe);
+        
+        if (await _householdRepository.GetHouseholdById(recipe.HouseholdId) == null)
+        {
+            throw new HouseholdNotFoundException();
+        }
+        
+        await _recipeRepository.UpdateRecipe(recipe);
+    }
 }
