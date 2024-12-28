@@ -33,5 +33,12 @@ namespace FoederDAL.Repository
                 .Include(r => r.Household)
                 .FirstOrDefaultAsync(r => r.Id == recipeId);
         }
+
+        public async Task UpdateRecipe(Recipe recipe)
+        {
+            _context.Recipes.Update(recipe);
+            
+            await _context.SaveChangesAsync();
+        }
     }
 }
