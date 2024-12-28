@@ -47,4 +47,22 @@ public class RecipeController : ControllerBase
             return StatusCode(500, ex.Message);
         }
     }
+    
+    [HttpGet("GetRecipe")]
+    [Authorize]
+    public async Task<IActionResult> GetRecipe(Guid recipeId)
+    {
+        try
+        {
+            return Ok(await _recipeService.GetRecipe(recipeId));
+        }
+        catch (RecipeNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+    }
 }
