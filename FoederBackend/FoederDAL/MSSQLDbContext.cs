@@ -23,13 +23,19 @@ namespace FoederDAL
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Household) 
                 .WithMany(h => h.Users) 
-                .HasForeignKey(u => u.HouseholdId); 
-            
+                .HasForeignKey(u => u.HouseholdId);
+
             modelBuilder.Entity<Recipe>()
                 .HasOne(r => r.Household)
                 .WithMany(r => r.Recipes)
                 .HasForeignKey(r => r.HouseholdId)
-                .IsRequired();  
+                .IsRequired();
+            
+            modelBuilder.Entity<Recipe>()
+                .HasMany(r => r.Ingredients)
+                .WithOne() // No navigation property on Ingredient
+                .HasForeignKey(i => i.RecipeId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
     

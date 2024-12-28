@@ -10,4 +10,5 @@ public interface IRecipeService
     Task AddRecipe(Recipe recipe);
     Task<Recipe> GetRecipe(Guid recipeId);
     Task UpdateRecipe(Recipe recipe);
+    Task DeleteRecipe(Guid recipeId);
 }

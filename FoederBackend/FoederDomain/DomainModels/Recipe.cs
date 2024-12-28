@@ -32,6 +32,8 @@ public class Ingredient
     public string Name { get; set; } = string.Empty;
     [Required, MinLength(1), MaxLength(50)]
     public string Amount { get; set; } = string.Empty;
-    
+
+    public Guid RecipeId { get; set; }
+
     public Ingredient(){}
 }

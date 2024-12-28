@@ -1,4 +1,5 @@
-﻿using FoederDomain.DomainModels;
+﻿using FoederDomain.CustomExceptions;
+using FoederDomain.DomainModels;
 using FoederDomain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,8 +37,28 @@ namespace FoederDAL.Repository
 
         public async Task UpdateRecipe(Recipe recipe)
         {
+            var foundRecipe = await _context.Recipes.FirstOrDefaultAsync(r => r.Id == recipe.Id);
+
+            if (foundRecipe == null)
+            {
+                throw new RecipeNotFoundException();
+            }
+            
             _context.Recipes.Update(recipe);
             
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteRecipe(Guid recipeId)
+        {
+            var recipe = await _context.Recipes.FirstOrDefaultAsync(r => r.Id ==  recipeId);
+            
+            if (recipe == null)
+            {
+                throw new RecipeNotFoundException();
+            }
+            
+            _context.Recipes.Remove(recipe);
             await _context.SaveChangesAsync();
         }
     }

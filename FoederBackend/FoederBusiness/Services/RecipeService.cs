@@ -85,4 +85,9 @@ public class RecipeService : IRecipeService
         
         await _recipeRepository.UpdateRecipe(recipe);
     }
+
+    public async Task DeleteRecipe(Guid recipeId)
+    {
+        await _recipeRepository.DeleteRecipe(recipeId);
+    }
 }

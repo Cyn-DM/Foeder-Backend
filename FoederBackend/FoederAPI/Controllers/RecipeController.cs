@@ -75,12 +75,35 @@ public class RecipeController : ControllerBase
         {
             await _recipeService.UpdateRecipe(recipe);
             return Ok();
-        } 
+        }
         catch (InvalidObjectException ex)
         {
             return BadRequest(ex.ValidationResults);
         }
+        catch (RecipeNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
         catch (HouseholdNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+    }
+
+    [HttpDelete("DeleteRecipe")]
+    [Authorize]
+    public async Task<IActionResult> DeleteRecipe(Guid recipeId)
+    {
+        try
+        {
+            await _recipeService.DeleteRecipe(recipeId);
+            return Ok();
+        }
+        catch (RecipeNotFoundException ex)
         {
             return NotFound(ex.Message);
         }
