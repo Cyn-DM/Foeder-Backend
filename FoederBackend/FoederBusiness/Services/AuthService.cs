@@ -22,6 +22,7 @@ namespace FoederBusiness.Services
         public async Task<LoginTokenResult?> Login(string authToken)
         {
             var tokenResult = await _googleTokenVerifier.VerifyIdToken(authToken);
+            
 
             if (tokenResult.IsValid == false)
             {
