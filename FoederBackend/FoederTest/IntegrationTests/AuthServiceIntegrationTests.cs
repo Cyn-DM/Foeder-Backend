@@ -76,7 +76,7 @@ public class AuthServiceIntegrationTests
         Assert.IsNotNull(result);
         Assert.IsTrue(result.isRefreshTokenFound);
         Assert.IsFalse(result.IsRefreshTokenExpired);
-        
+        Assert.IsNotNull(result.AccessToken);
 
         Dispose();
     }
