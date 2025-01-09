@@ -39,6 +39,10 @@ namespace FoederBusiness.Services
             string accessToken = _jwtAuthTokenUtils.GenerateAccessToken(foederUser);
             string refreshToken = _jwtAuthTokenUtils.GenerateRefreshToken();
             
+            
+            
+            
+            
             _authRepo.StoreRefreshToken(new RefreshToken(){ Token = refreshToken, ExpirationDate = DateTime.Now.AddDays(1), User = foederUser });
             
             return new LoginTokenResult() { AccessToken = accessToken, RefreshToken = refreshToken };

@@ -4,6 +4,7 @@ using FoederBusiness.Interfaces;
 using FoederDomain.CustomExceptions;
 using FoederDomain.DomainModels;
 using FoederDomain.Interfaces;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Data.SqlClient;
 
 namespace FoederBusiness.Services;
@@ -13,12 +14,14 @@ public class HouseholdInvitesService : IHouseholdInvitesService
     private readonly IHouseholdInvitesRepository _householdInvitesRepository;
     private readonly IAuthRepository _authRepository;
     private readonly IHouseholdRepository _householdRepository;
+    private readonly IInviteNotifier _notifier;
 
-    public HouseholdInvitesService(IHouseholdInvitesRepository householdInvitesRepository, IAuthRepository authRepository, IHouseholdRepository householdRepository)
+    public HouseholdInvitesService(IHouseholdInvitesRepository householdInvitesRepository, IAuthRepository authRepository, IHouseholdRepository householdRepository, IInviteNotifier notifier)
     {
         _householdInvitesRepository = householdInvitesRepository;
         _authRepository = authRepository;
         _householdRepository = householdRepository;
+        _notifier = notifier;
     }
     public async Task<List<HouseholdInvite>> GetHouseholdInvites(Guid userId)
     {
@@ -55,6 +58,10 @@ public class HouseholdInvitesService : IHouseholdInvitesService
             householdInvite.InvitedUser = user;
 
             await _householdInvitesRepository.InviteToHousehold(householdInvite);
+
+            var message = $"{householdInvite.Household.Name} has invited you to the household.";
+            
+            await _notifier.NotifyInvite(user.Id, message);
     }
 
     public async Task RespondToHouseholdInvite(Guid inviteId, bool isAccepted)

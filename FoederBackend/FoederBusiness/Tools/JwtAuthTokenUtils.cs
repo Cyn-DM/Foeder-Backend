@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Web;
 using FoederBusiness.Helpers;
 using FoederBusiness.Interfaces;
 using FoederDomain.DomainModels;
@@ -61,7 +62,9 @@ public class JwtAuthTokenUtils : IJwtAuthTokenUtils
         using (var rng = RandomNumberGenerator.Create())
         {
             rng.GetBytes(randomNumber);
-            return Convert.ToBase64String(randomNumber);
+            var baseString = Convert.ToBase64String(randomNumber);
+
+            return HttpUtility.UrlEncode(baseString);
         }
     }
 

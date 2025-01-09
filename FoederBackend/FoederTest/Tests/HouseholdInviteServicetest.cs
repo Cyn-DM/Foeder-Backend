@@ -1,3 +1,4 @@
+using FoederBusiness.Interfaces;
 using FoederBusiness.Services;
 using FoederDAL.Repository;
 using FoederDomain.CustomExceptions;
@@ -17,12 +18,13 @@ public class HouseholdInviteServicetest
         var mockHouseholdInvitesRepo = new Mock<IHouseholdInvitesRepository>();
         var mockAuthRepo = new Mock<IAuthRepository>();
         var mockHouseholdRepo = new Mock<IHouseholdRepository>();
+        var mockNotifier = new Mock<IInviteNotifier>();
         var userId = Guid.NewGuid();
         var householdId = Guid.NewGuid();
         var email = "test@example.com";
         var validUser = new User { Email = email, FirstName = "John", LastName = "Doe" , Id = userId };
         var householdUser = new User { Email = email, FirstName = "John", LastName = "Doe", Id = userId , Household = new Household { Id = householdId } };
-        var service = new HouseholdInvitesService(mockHouseholdInvitesRepo.Object, mockAuthRepo.Object, mockHouseholdRepo.Object);
+        var service = new HouseholdInvitesService(mockHouseholdInvitesRepo.Object, mockAuthRepo.Object, mockHouseholdRepo.Object, mockNotifier.Object);
         
         mockAuthRepo.Setup(m => m.FindUserById(It.Is<Guid>(id => id == userId)))
             .ReturnsAsync(validUser);
