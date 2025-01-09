@@ -55,11 +55,11 @@ namespace FoederAPI.Controllers
                 return Unauthorized();
             }
             
-            var decodedToken = HttpUtility.UrlDecode(refreshToken);
+           
             
             try
             {
-                var result = await authService.Refresh(decodedToken);
+                var result = await authService.Refresh(refreshToken);
 
                 if (!result!.isRefreshTokenFound)
                 {

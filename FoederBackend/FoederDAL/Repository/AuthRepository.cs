@@ -43,7 +43,7 @@ public class AuthRepository : IAuthRepository
 
     public async Task<RefreshToken?> GetStoredRefreshToken(string refreshToken)
     {
-        return await _context.RefreshTokens.Include(rt => rt.User).FirstOrDefaultAsync(rt => rt.Token == refreshToken);
+        return await _context.RefreshTokens.Include(rt => rt.User).Include(u => u.User.Household).FirstOrDefaultAsync(rt => rt.Token == refreshToken);
     }
 
     public void StoreRefreshToken(RefreshToken refreshToken)

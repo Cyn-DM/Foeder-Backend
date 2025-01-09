@@ -2,6 +2,7 @@ using FoederDAL;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 using System.Text.Json.Serialization;
+using FoederAPI.Hubs;
 using FoederBusiness;
 using FoederBusiness.Helpers;
 using FoederBusiness.Interfaces;
@@ -10,6 +11,7 @@ using FoederBusiness.Tools;
 using FoederDAL.Repository;
 using FoederDomain.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
@@ -35,6 +37,8 @@ try
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+    builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
+    builder.Services.AddSignalR();
     builder.Configuration.AddUserSecrets<Program>(optional : true)
         .AddEnvironmentVariables();
     var dbConnectionString = builder.Configuration["DbConnectionString"];
@@ -77,6 +81,7 @@ try
     builder.Services.AddScoped<IHouseholdService, HouseholdService>();
     builder.Services.AddScoped<IHouseholdInvitesRepository, HouseholdInvitesRepository>();
     builder.Services.AddScoped<IHouseholdInvitesService, HouseholdInvitesService>();
+    builder.Services.AddScoped<IInviteNotifier, SignalRInviteNotifier>();
     
     builder.Services.AddSingleton<AuthSettings>(sp => new AuthSettings(jwtSecret ?? throw new Exception("Add jwtSecret."),
         jwtIssuer ?? throw new Exception("Add issuer."),
@@ -142,7 +147,9 @@ try
 
     app.MapControllers();
 
-    app.Run();
+    app.MapHub<InviteHub>("/inviteHub").RequireAuthorization();
+
+    await app.RunAsync();
 }
 catch (Exception ex)
 {
