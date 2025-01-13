@@ -38,6 +38,30 @@ namespace FoederDAL.Migrations
                     b.ToTable("Households");
                 });
 
+            modelBuilder.Entity("FoederDomain.DomainModels.HouseholdInvite", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("HouseholdId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("InvitedUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsAccepted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HouseholdId");
+
+                    b.HasIndex("InvitedUserId");
+
+                    b.ToTable("HouseholdInvites");
+                });
+
             modelBuilder.Entity("FoederDomain.DomainModels.Ingredient", b =>
                 {
                     b.Property<Guid>("Id")
@@ -54,7 +78,7 @@ namespace FoederDAL.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid?>("RecipeId")
+                    b.Property<Guid>("RecipeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -80,7 +104,8 @@ namespace FoederDAL.Migrations
 
                     b.Property<string>("Steps")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -94,9 +119,32 @@ namespace FoederDAL.Migrations
                     b.ToTable("Recipes");
                 });
 
+            modelBuilder.Entity("FoederDomain.DomainModels.RefreshToken", b =>
+                {
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Token");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("FoederDomain.DomainModels.User", b =>
                 {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(320)
                         .HasColumnType("nvarchar(320)");
 
@@ -105,29 +153,21 @@ namespace FoederDAL.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid>("HouseholdId")
+                    b.Property<Guid?>("HouseholdId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasMaxLength(60)
                         .HasColumnType("nvarchar(60)");
 
-                    b.HasKey("Email");
+                    b.HasKey("Id");
 
                     b.HasIndex("HouseholdId");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("FoederDomain.DomainModels.Ingredient", b =>
-                {
-                    b.HasOne("FoederDomain.DomainModels.Recipe", null)
-                        .WithMany("Ingredients")
-                        .HasForeignKey("RecipeId");
-                });
-
-            modelBuilder.Entity("FoederDomain.DomainModels.Recipe", b =>
+            modelBuilder.Entity("FoederDomain.DomainModels.HouseholdInvite", b =>
                 {
                     b.HasOne("FoederDomain.DomainModels.Household", "Household")
                         .WithMany()
@@ -135,13 +175,30 @@ namespace FoederDAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("FoederDomain.DomainModels.User", "InvitedUser")
+                        .WithMany()
+                        .HasForeignKey("InvitedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Household");
+
+                    b.Navigation("InvitedUser");
                 });
 
-            modelBuilder.Entity("FoederDomain.DomainModels.User", b =>
+            modelBuilder.Entity("FoederDomain.DomainModels.Ingredient", b =>
+                {
+                    b.HasOne("FoederDomain.DomainModels.Recipe", null)
+                        .WithMany("Ingredients")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("FoederDomain.DomainModels.Recipe", b =>
                 {
                     b.HasOne("FoederDomain.DomainModels.Household", "Household")
-                        .WithMany("Users")
+                        .WithMany("Recipes")
                         .HasForeignKey("HouseholdId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -149,8 +206,30 @@ namespace FoederDAL.Migrations
                     b.Navigation("Household");
                 });
 
+            modelBuilder.Entity("FoederDomain.DomainModels.RefreshToken", b =>
+                {
+                    b.HasOne("FoederDomain.DomainModels.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FoederDomain.DomainModels.User", b =>
+                {
+                    b.HasOne("FoederDomain.DomainModels.Household", "Household")
+                        .WithMany("Users")
+                        .HasForeignKey("HouseholdId");
+
+                    b.Navigation("Household");
+                });
+
             modelBuilder.Entity("FoederDomain.DomainModels.Household", b =>
                 {
+                    b.Navigation("Recipes");
+
                     b.Navigation("Users");
                 });
 
