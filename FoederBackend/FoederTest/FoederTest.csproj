@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FoederAPI\FoederAPI.csproj" />
     <ProjectReference Include="..\FoederBusiness\FoederBusiness.csproj" />
     <ProjectReference Include="..\FoederDomain\FoederDomain.csproj" />
   </ItemGroup>
