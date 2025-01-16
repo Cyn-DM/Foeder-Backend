@@ -147,7 +147,7 @@ try
 
     app.MapControllers();
 
-    app.MapHub<InviteHub>("/inviteHub").RequireAuthorization();
+    app.MapHub<InviteHub>("/inviteHub").RequireAuthorization(); 
 
     await app.RunAsync();
 }

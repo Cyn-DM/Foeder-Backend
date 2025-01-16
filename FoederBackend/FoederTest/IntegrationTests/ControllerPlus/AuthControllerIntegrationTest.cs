@@ -1,4 +1,6 @@
-﻿using System.Security.Cryptography;
+﻿using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 using FoederAPI.Controllers;
 using FoederBusiness.Helpers;
 using FoederBusiness.Services;
@@ -13,113 +15,67 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Moq;
+using System.Text.Json;
+using FoederBusiness.Dtos;
 
 namespace FoederTest.IntegrationTests.ControllerPlus;
 
 [TestFixture]
 public class AuthControllerIntegrationTest
 {
-    private SqliteConnection _connection;
-    private DbContextOptions<MssqlDbContext> _contextOptions;
-    private AuthController _authController;
-
-
-    [SetUp]
-    public void SetUp()
-    {
-        // Set up in memory database
-        _connection = new SqliteConnection("Filename=:memory:");
-        _connection.Open();
-
-        _contextOptions = new DbContextOptionsBuilder<MssqlDbContext>()
-            .UseSqlite(_connection)
-            .Options;
-
-        var context = new MssqlDbContext(_contextOptions);
-
-        if (context.Database.EnsureCreated())
-        {
-            var john = new User { Email = "test@example.com", FirstName = "John", LastName = "Doe" };
-            context.AddRange(
-                john,
-                new RefreshToken()
-                {
-                    Token = "valid_token",
-                    ExpirationDate = DateTime.Now.AddDays(3),
-                    User = john,
-                },
-                new RefreshToken()
-                {
-                    Token = "expired_token",
-                    ExpirationDate = DateTime.Now.AddDays(-3),
-                    User = john,
-                });
-            context.SaveChanges();
-        }
-
-        byte[] keyBytes = new byte[48];
-        RandomNumberGenerator.Fill(keyBytes);
-        string base64Key = Convert.ToBase64String(keyBytes);
-
-        var mockGoogle = new Mock<IGoogleTokenVerifier>();
-        var mockAuthRepo = new AuthRepository(context);
-        var utils = new JwtAuthTokenUtils(new AuthSettings(base64Key, "test", "test", "30"));
-        var authService = new AuthService(mockGoogle.Object, mockAuthRepo, utils);
-        _authController = new AuthController(authService);
-        var httpContext = new DefaultHttpContext();
-        _authController.ControllerContext = new ControllerContext() { HttpContext = httpContext };
-
-        var validIdToken = "valid_id_token";
-        var invalidIdToken = "invalid_id_token";
-
-        mockGoogle.Setup(m => m.VerifyIdToken(It.Is<string>((to) => to == validIdToken)))
-            .ReturnsAsync(() => new TokenVerificationResult
-            {
-                IsValid = true,
-                payload = new GoogleJsonWebSignature.Payload
-                    { Email = "test@example.com", GivenName = "John", FamilyName = "Doe" }
-            });
-
-        mockGoogle.Setup(m => m.VerifyIdToken(It.Is<string>((to) => to == invalidIdToken)))
-            .ReturnsAsync(() => new TokenVerificationResult
-            {
-                IsValid = false,
-            });
-    }
-
-    private MssqlDbContext CreateContext() => new MssqlDbContext(_contextOptions);
-
-    [TearDown]
-    public void Dispose() => _connection.Dispose();
-
-
+    
     [Test]
     public async Task LoginSuccessfull()
     {
-        using var context = CreateContext();
-        var request = new Response()
+        await using var application = new ApiWebApplicationFactory();
+        using var client = application.CreateClient();
+        
+        var request = new 
         {
             CredentialResponse = "valid_id_token",
         };
         
-        var result = await _authController.LogIn(request);
+        var requestContent = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
         
-        Assert.IsNotNull(result);
-        Assert.IsInstanceOf<OkObjectResult>(result);
-        Dispose();
+        
+        var response = await client.PostAsync("api/Auth/Login", requestContent);
+
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var responseObject = JsonSerializer.Deserialize<LoginTokenResult>(responseContent);
+        
+        Assert.IsNotNull(responseObject);
+        Assert.IsNotEmpty(responseObject.AccessToken);
+        Assert.IsNotEmpty(responseObject.RefreshToken);
+
+
     }
     
     [Test]
     public async Task AssertLoginFailed()
     {
-        using var context = CreateContext();
-        var idToken = "invalid_id_token";
 
-        var result = await _authController.LogIn(new Response(){CredentialResponse = idToken});
+        await using var application = new ApiWebApplicationFactory();
+        using var client = application.CreateClient();
         
-        Assert.IsNotNull(result);
-        Assert.IsInstanceOf<UnauthorizedResult>(result);
-        Dispose();
+        var request = new 
+        {
+            CredentialResponse = "invalid_id_token",
+        };
+        
+        var requestContent = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+        
+        
+        var response = await client.PostAsync("api/Auth/Login", requestContent);
+
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.InternalServerError));
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var responseObject = JsonSerializer.Deserialize<LoginTokenResult>(responseContent);
+        
+        Assert.IsNotNull(responseObject);
+        Assert.IsNull(responseObject.AccessToken);
+        Assert.IsNull(responseObject.RefreshToken);
+
     }
     
 }
