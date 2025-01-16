@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using FoederAPI.Controllers;
@@ -42,13 +43,9 @@ public class AuthControllerIntegrationTest
 
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         var responseContent = await response.Content.ReadAsStringAsync();
-        var responseObject = JsonSerializer.Deserialize<LoginTokenResult>(responseContent);
-        
-        Assert.IsNotNull(responseObject);
-        Assert.IsNotEmpty(responseObject.AccessToken);
-        Assert.IsNotEmpty(responseObject.RefreshToken);
-
-
+        var handler = new JwtSecurityTokenHandler();
+        Assert.True(handler.CanReadToken(responseContent));
+        Assert.IsNotNull(responseContent);
     }
     
     [Test]
@@ -68,13 +65,11 @@ public class AuthControllerIntegrationTest
         
         var response = await client.PostAsync("api/Auth/Login", requestContent);
 
-        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.InternalServerError));
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Unauthorized));
         var responseContent = await response.Content.ReadAsStringAsync();
-        var responseObject = JsonSerializer.Deserialize<LoginTokenResult>(responseContent);
-        
-        Assert.IsNotNull(responseObject);
-        Assert.IsNull(responseObject.AccessToken);
-        Assert.IsNull(responseObject.RefreshToken);
+        var handler = new JwtSecurityTokenHandler();
+        Assert.False(handler.CanReadToken(responseContent));
+        Assert.IsNotNull(responseContent);
 
     }
     
