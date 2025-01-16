@@ -68,8 +68,10 @@ try
         });
     builder.Services.AddAuthorization();
     
-    //Dependencies
-    builder.Services.AddDbContext<MssqlDbContext>(options => options.UseSqlServer(dbConnectionString));
+    if (!builder.Environment.IsEnvironment("Test"))
+    {
+        builder.Services.AddDbContext<MssqlDbContext>(options => options.UseSqlServer(dbConnectionString));
+    }
     
     builder.Services.AddScoped<IJwtAuthTokenUtils, JwtAuthTokenUtils>();
     builder.Services.AddScoped<IGoogleTokenVerifier, GoogleTokenVerifier>();
@@ -147,7 +149,7 @@ try
 
     app.MapControllers();
 
-    app.MapHub<InviteHub>("/inviteHub").RequireAuthorization();
+    app.MapHub<InviteHub>("/inviteHub").RequireAuthorization(); 
 
     await app.RunAsync();
 }
@@ -160,4 +162,4 @@ finally
     Log.CloseAndFlush();
 }
 
-
+public partial class Program { }
